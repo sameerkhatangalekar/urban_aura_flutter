@@ -1,8 +1,9 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:urban_aura_flutter/core/common/widgets/custom_divider.dart';
+import 'package:urban_aura_flutter/core/common/widgets/spacer_box.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 
 class Footer extends StatelessWidget {
@@ -26,43 +27,16 @@ class Footer extends StatelessWidget {
           height: 12,
         ),
         const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FaIcon(FontAwesomeIcons.twitter),
-            SizedBox(
-              width: 28,
-            ),
             FaIcon(FontAwesomeIcons.facebook),
-            SizedBox(
-              width: 28,
-            ),
             FaIcon(FontAwesomeIcons.instagram)
           ],
         ),
-        const SizedBox(
-          height: 28,
-        ),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Divider(
-                indent: size.width * 0.3,
-                endIndent: size.width * 0.3,
-                thickness: 0.5,
-                color: AppPalette.label),
-            Transform.rotate(
-              angle: pi / 4,
-              child: Container(
-                height: 10,
-                width: 10,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: AppPalette.label, width: 0.6)),
-              ),
-            )
-          ],
-        ),
+        const SpacerBox(),
+        const CustomDivider(),
         const SizedBox(
           height: 12,
         ),
@@ -93,29 +67,8 @@ class Footer extends StatelessWidget {
         const SizedBox(
           height: 12,
         ),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Divider(
-                indent: size.width * 0.3,
-                endIndent: size.width * 0.3,
-                thickness: 0.5,
-                color: AppPalette.label),
-            Transform.rotate(
-              angle: pi / 4,
-              child: Container(
-                height: 10,
-                width: 10,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: AppPalette.label, width: 0.6)),
-              ),
-            )
-          ],
-        ),
-        const SizedBox(
-          height: 28,
-        ),
+        const CustomDivider(),
+        const SpacerBox(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,9 +93,7 @@ class Footer extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(
-          height: 28,
-        ),
+        const SpacerBox(),
         Container(
           width: size.width,
           height: 40,

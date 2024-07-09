@@ -1,7 +1,9 @@
 
-import 'dart:ui';
 
-class AppPalette {
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+sealed class AppPalette {
   
   static const Color primaryColor = Color(0xFFA8715A);
   static const Color secondaryColor = Color(0xFFDD8560);
@@ -22,5 +24,20 @@ class AppPalette {
   static const Color label = Color(0xFF555555);
 
   static const Color placeHolder = Color(0xFF888888);
+
+}
+
+sealed class AppThemeData {
+
+  static ThemeData theme = ThemeData(
+    scaffoldBackgroundColor:  AppPalette.offWhite,
+    textTheme: GoogleFonts.tenorSansTextTheme(),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
+      centerTitle: true,
+    ),
+
+  );
+
 
 }
