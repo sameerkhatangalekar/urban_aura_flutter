@@ -1,9 +1,12 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:urban_aura_flutter/core/common/bloc/app_user_cubit.dart';
 import 'package:vector_graphics/vector_graphics.dart';
 
 import '../../../../core/common/widgets/custom_divider.dart';
@@ -21,7 +24,31 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
-        extendBody: true,
+        drawer:  Drawer(
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          backgroundColor: Colors.grey.shade200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: ListTile(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  tileColor: Colors.white,
+                  trailing: const Icon(
+                    Icons.logout,
+                    color: Colors.black,
+                  ),
+                  title: const Text('Logout'),
+                  onTap: () {
+                    context.read<AppUserCubit>().logout();
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
         body: CustomScrollView(
           slivers: [
             const CustomSliverAppBar(),
@@ -187,14 +214,14 @@ class HomePage extends StatelessWidget {
             ),
 
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 2),
               sliver: SliverGrid.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 8,
+                    crossAxisSpacing: 2,
                     mainAxisSpacing: 2,
-                    childAspectRatio: 0.62),
-                itemCount: homePageProducts.length,
+                    childAspectRatio: 0.5),
+                itemCount: min(homePageProducts.length, 4),
                 itemBuilder: (BuildContext context, int index) {
                   final product = homePageProducts[index];
                   return GestureDetector(
@@ -204,14 +231,16 @@ class HomePage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Hero(
-                          tag: product.image,
-                          child: Image.asset(
-                            product.image,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Center(
+                        Expanded(
+                          flex:3,
+                          child: Hero(
+                            tag: product.id,
+                            child: Image.network(
+                              product.image,
+                              fit: BoxFit.fill,
+                            ),
+                          ),),
+                        Expanded( flex:1,child: Center(
                           child: Column(
                             children: [
                               Text(
@@ -236,7 +265,7 @@ class HomePage extends StatelessWidget {
                               )
                             ],
                           ),
-                        )
+                        ))
                       ],
                     ),
                   );
@@ -254,7 +283,9 @@ class HomePage extends StatelessWidget {
                   iconColor: WidgetStatePropertyAll(AppPalette.titleActive),
                   splashFactory: NoSplash.splashFactory,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  context.push('/products');
+                },
                 iconAlignment: IconAlignment.end,
                 label: Text(
                   'Explore More',

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 sealed class AppPalette {
-  
+  static const Color primaryCircle  = Color.fromRGBO(206, 147, 216, 1);
+  static const Color secondaryCircle  = Color.fromRGBO(244, 143, 177, 1);
+  static const Color tertiaryCircle  = Color.fromRGBO(255, 204, 128, 1);
   static const Color primaryColor = Color(0xFFA8715A);
   static const Color secondaryColor = Color(0xFFDD8560);
 
@@ -36,7 +38,35 @@ sealed class AppThemeData {
       backgroundColor: Colors.white,
       centerTitle: true,
     ),
+    inputDecorationTheme: InputDecorationTheme(
+      isDense: true,
+      hintStyle: const TextStyle(color: Colors.white70),
+      fillColor: Colors.grey.shade900,
+      filled:true,
+      labelStyle: const TextStyle(color: Colors.white70),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(4),
+        borderSide:
+        const BorderSide(color: Colors.white12, width: 1),
+      ),
+      errorStyle: const TextStyle(color: Colors.redAccent),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(4),
+        borderSide:
+        const BorderSide(color: Colors.redAccent, width: 1),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(4),
+        borderSide:
+        const BorderSide(color: Colors.redAccent, width: 1),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(4),
+        borderSide:
+        const BorderSide(color: Colors.white70, width: 1),
+      ),
 
+    )
   );
 
 

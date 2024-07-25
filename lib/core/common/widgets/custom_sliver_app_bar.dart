@@ -10,8 +10,10 @@ class CustomSliverAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       floating: true,
-      leading:showBackButton ?  IconButton(onPressed: ()=> context.pop(), icon: const Icon(Icons.close)) :  InkWell(
-        onTap: () {},
+      leading: showBackButton ?  IconButton(onPressed: ()=> context.pop(), icon: const Icon(Icons.close)) :  InkWell(
+        onTap: () {
+          Scaffold.of(context).openDrawer();
+        },
         splashColor: Colors.grey.shade300,
         child: SvgPicture.asset(
           'assets/icons/menu_icon.svg',

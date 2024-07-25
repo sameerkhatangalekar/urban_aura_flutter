@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:urban_aura_flutter/core/common/widgets/custom_divider.dart';
-import '../../../../core/common/widgets/diamond_indicator.dart';
 import '../../../../core/common/widgets/spacer_box.dart';
 import '../../../../core/config/mock_data.dart';
 import '../../../../core/theme/app_palette.dart';
@@ -18,7 +17,7 @@ class _RecommendationsListState extends State<RecommendationsList> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
+
     return Column(
       children: [
         Center(
@@ -40,36 +39,41 @@ class _RecommendationsListState extends State<RecommendationsList> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    homePageProducts[itemIndex].image,
-                    fit: BoxFit.contain,
-                  ),
-                  Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          homePageProducts[itemIndex].productName,
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.fontSize,
-                              color: AppPalette.body),
-                        ),
-                        Text(
-                          '\$${homePageProducts[itemIndex].price.toStringAsFixed(0)}',
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: AppPalette.primaryColor,
-                          ),
-                        )
-                      ],
+                  Expanded(
+                    flex: 4,
+                    child: Image.network(
+                      homePageProducts[itemIndex].image,
+                      fit: BoxFit.contain,
                     ),
-                  )
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              '${homePageProducts[itemIndex].productName} ${homePageProducts[itemIndex].description}',
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.fontSize,
+                                  color: AppPalette.body),
+                            ),
+                            Text(
+                              '\$${homePageProducts[itemIndex].price.toStringAsFixed(0)}',
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: AppPalette.primaryColor,
+                              ),
+                            )
+                          ],
+                        ),
+                      ))
                 ],
               ),
             );
@@ -91,30 +95,31 @@ class _RecommendationsListState extends State<RecommendationsList> {
         const SizedBox(
           height: 12,
         ),
-        Container(
-          constraints: BoxConstraints(
-              maxHeight: 8,
-              minHeight: 8,
-              maxWidth: size.width * 0.3,
-              minWidth: size.width * 0.3),
-          child: Center(
-            child: ListView.separated(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: homePageProducts.length,
-              itemBuilder: (context, index) {
-                return DiamondIndicator(
-                  isActive: index == activeItem,
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(
-                  width: 8,
-                );
-              },
-            ),
-          ),
-        )
+        // Container(
+        //   constraints: BoxConstraints(
+        //     maxHeight: 8,
+        //     minHeight: 8,
+        //     maxWidth: size.width * 0.4,
+        //     minWidth: size.width * 0.4,
+        //   ),
+        //   child: Center(
+        //     child: ListView.separated(
+        //       shrinkWrap: true,
+        //       scrollDirection: Axis.horizontal,
+        //       itemCount: homePageProducts.length,
+        //       itemBuilder: (context, index) {
+        //         return DiamondIndicator(
+        //           isActive: index == activeItem,
+        //         );
+        //       },
+        //       separatorBuilder: (BuildContext context, int index) {
+        //         return const SizedBox(
+        //           width: 8,
+        //         );
+        //       },
+        //     ),
+        //   ),
+        // )
       ],
     );
   }

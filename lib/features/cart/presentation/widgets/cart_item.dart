@@ -5,7 +5,7 @@ import 'package:urban_aura_flutter/core/config/mock_data.dart';
 import '../../../../core/theme/app_palette.dart';
 
 class CartItem extends StatefulWidget {
-  final ProductData productData;
+  final MockProductData productData;
   const CartItem({super.key, required this.productData});
 
   @override
@@ -31,8 +31,8 @@ class _CartItemState extends State<CartItem> {
           children: [
             Expanded(
               flex: 1,
-              child: Image.asset(
-                widget.productData .image,
+              child: Image.network(
+                widget.productData.image,
                 fit: BoxFit.contain,
               ),
             ),
@@ -40,7 +40,7 @@ class _CartItemState extends State<CartItem> {
               width: 12,
             ),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -52,7 +52,7 @@ class _CartItemState extends State<CartItem> {
                     widget.productData.productName,
                     style: Theme.of(context)
                         .textTheme
-                        .titleLarge
+                        .titleMedium
                         ?.copyWith(
                         letterSpacing: 4,
                         color: AppPalette.titleActive),
@@ -63,7 +63,7 @@ class _CartItemState extends State<CartItem> {
                   Text(widget.productData.description,
                       style: Theme.of(context)
                           .textTheme
-                          .titleMedium
+                          .titleSmall
                           ?.copyWith(
                           color: AppPalette.label,
                           wordSpacing: 2)),
@@ -71,6 +71,7 @@ class _CartItemState extends State<CartItem> {
                     height: 4,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       IconButton(
                         onPressed: () {
@@ -82,10 +83,11 @@ class _CartItemState extends State<CartItem> {
                           Icons.remove,
                         ), color: AppPalette.placeHolder,
                         style: ButtonStyle(
+                          iconSize: const WidgetStatePropertyAll(16),
                           maximumSize: const WidgetStatePropertyAll(
-                              Size(28, 28)),
+                              Size(20, 20)),
                           minimumSize: const WidgetStatePropertyAll(
-                              Size(28, 28)),
+                              Size(20, 20)),
                           padding: const WidgetStatePropertyAll(
                               EdgeInsets.zero),
                           shape: WidgetStatePropertyAll(
@@ -93,14 +95,14 @@ class _CartItemState extends State<CartItem> {
                               borderRadius:
                               BorderRadius.circular(100),
                               side: const BorderSide(
-                                  color: AppPalette.placeHolder,
+                                  color: Colors.black26,
                                   width: 0.5),
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(
-                        height: 4,
+                        width: 12,
                       ),
                       Text(itemCount.toString(),
                           style: Theme.of(context)
@@ -110,7 +112,7 @@ class _CartItemState extends State<CartItem> {
                               color: AppPalette.label,
                               wordSpacing: 2)),
                       const SizedBox(
-                        height: 4,
+                        width: 12,
                       ),
                       IconButton(
                         onPressed: () {
@@ -124,10 +126,11 @@ class _CartItemState extends State<CartItem> {
                           Icons.add,
                         ),
                         style: ButtonStyle(
+                          iconSize: const WidgetStatePropertyAll(16),
                           maximumSize: const WidgetStatePropertyAll(
-                              Size(28, 28)),
+                              Size(20, 20)),
                           minimumSize: const WidgetStatePropertyAll(
-                              Size(28, 28)),
+                              Size(20, 20)),
                           padding: const WidgetStatePropertyAll(
                               EdgeInsets.zero),
                           shape: WidgetStatePropertyAll(
@@ -135,7 +138,7 @@ class _CartItemState extends State<CartItem> {
                               borderRadius:
                               BorderRadius.circular(100),
                               side: const BorderSide(
-                                  color: AppPalette.placeHolder,
+                                  color: Colors.black26,
                                   width: 0.5),
                             ),
                           ),

@@ -3,10 +3,10 @@ import 'package:urban_aura_flutter/core/common/widgets/footer.dart';
 import 'package:urban_aura_flutter/core/config/mock_data.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 
-import '../../../core/common/widgets/custom_sliver_app_bar.dart';
+import '../../../../core/common/widgets/custom_sliver_app_bar.dart';
 
 class ProductPage extends StatelessWidget {
-  final ProductData productData;
+  final MockProductData productData;
 
   const ProductPage({super.key, required this.productData});
 
@@ -46,11 +46,11 @@ class ProductPage extends StatelessWidget {
           SliverPadding(
             sliver: SliverToBoxAdapter(
               child: Hero(
-                tag: productData.image,
-                child: Image.asset(productData.image,
+                tag: productData.id,
+                child: Image.network(productData.image,
                     width: size.width,
                     height: size.height * 0.6,
-                    fit: BoxFit.cover),
+                    fit: BoxFit.contain),
               ),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
