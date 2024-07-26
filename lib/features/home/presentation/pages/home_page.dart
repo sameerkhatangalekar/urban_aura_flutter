@@ -1,12 +1,14 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urban_aura_flutter/core/common/bloc/app_user_cubit.dart';
+import 'package:urban_aura_flutter/core/helper/color_provider.dart';
 import 'package:vector_graphics/vector_graphics.dart';
 
 import '../../../../core/common/widgets/custom_divider.dart';
@@ -235,9 +237,10 @@ class HomePage extends StatelessWidget {
                           flex:3,
                           child: Hero(
                             tag: product.id,
-                            child: Image.network(
-                              product.image,
-                              fit: BoxFit.fill,
+                            child: CachedNetworkImage(
+                                 imageUrl:  product.image,
+                                  fit: BoxFit.fill,
+                                placeholder:(context,value) => Container(color: getRandomColor(),),
                             ),
                           ),),
                         Expanded( flex:1,child: Center(

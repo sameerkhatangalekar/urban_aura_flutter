@@ -1,14 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:urban_aura_flutter/core/common/widgets/footer.dart';
-import 'package:urban_aura_flutter/core/config/mock_data.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
+import 'package:urban_aura_flutter/features/products/domain/entity/product_entity.dart';
 
 import '../../../../core/common/widgets/custom_sliver_app_bar.dart';
 
 class ProductPage extends StatelessWidget {
-  final MockProductData productData;
+  final ProductEntity productEntity;
 
-  const ProductPage({super.key, required this.productData});
+  const ProductPage({super.key, required this.productEntity});
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +47,9 @@ class ProductPage extends StatelessWidget {
           SliverPadding(
             sliver: SliverToBoxAdapter(
               child: Hero(
-                tag: productData.id,
-                child: Image.network(productData.image,
+                tag: productEntity.id,
+                child: CachedNetworkImage(
+                    imageUrl:  productEntity.images[0],
                     width: size.width,
                     height: size.height * 0.6,
                     fit: BoxFit.contain),
@@ -63,14 +65,14 @@ class ProductPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    productData.productName,
+                    productEntity.name,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         letterSpacing: 4, color: AppPalette.titleActive),
                   ),
                   const SizedBox(
                     height: 4,
                   ),
-                  Text(productData.description,
+                  Text(productEntity.description,
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge
@@ -79,7 +81,7 @@ class ProductPage extends StatelessWidget {
                     height: 4,
                   ),
                   Text(
-                    '\$${productData.price.toStringAsFixed(0)}',
+                    '\$${productEntity.price.toStringAsFixed(0)}',
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge

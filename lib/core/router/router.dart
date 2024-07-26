@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:urban_aura_flutter/core/config/mock_data.dart';
 import 'package:urban_aura_flutter/features/auth/presentation/pages/signin_page.dart';
 import 'package:urban_aura_flutter/features/auth/presentation/pages/signup_page.dart';
 import 'package:urban_aura_flutter/features/cart/presentation/pages/cart_page.dart';
 import 'package:urban_aura_flutter/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:urban_aura_flutter/features/home/presentation/pages/home_page.dart';
+import 'package:urban_aura_flutter/features/products/domain/entity/product_entity.dart';
 import 'package:urban_aura_flutter/features/products/presentation/pages/product_page.dart';
 import 'package:urban_aura_flutter/features/products/presentation/pages/products_page.dart';
 
@@ -89,38 +89,13 @@ abstract class AppRouter {
       GoRoute(
           path: '/products',
           builder: (context, state) => const ProductsPage(),
-          // pageBuilder: (context, state) {
-          //   return CustomTransitionPage(
-          //       child:  const ProductsPage(),
-          //       transitionsBuilder:
-          //           (context, animation, secondaryAnimation, child) {
-          //         return CupertinoPageTransition(
-          //           primaryRouteAnimation: animation,
-          //           secondaryRouteAnimation: secondaryAnimation,
-          //           linearTransition: true,
-          //           child: child,
-          //         );
-          //       });
-          // },
           routes: [
             GoRoute(
               path: ':productName',
               builder: (context, state) => ProductPage(
-                productData: state.extra as MockProductData,
+                productEntity: state.extra as ProductEntity,
               ),
-              // pageBuilder: (context, state) {
-              //   return CustomTransitionPage(
-              //       child:  ProductPage(productData:  state.extra as MockProductData,),
-              //       transitionsBuilder:
-              //           (context, animation, secondaryAnimation, child) {
-              //         return CupertinoPageTransition(
-              //           primaryRouteAnimation: animation,
-              //           secondaryRouteAnimation: secondaryAnimation,
-              //           linearTransition: true,
-              //           child: child,
-              //         );
-              //       });
-              // },
+
             ),
           ]),
       GoRoute(
