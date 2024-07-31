@@ -1,7 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:urban_aura_flutter/core/common/widgets/spacer_box.dart';
+import 'package:flutter/rendering.dart';
 import 'package:urban_aura_flutter/core/helper/loading_dialog_controller.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 
@@ -16,7 +15,7 @@ class LoadingDialog {
 
   void show({
     required BuildContext context,
-    required String text,
+    String text = 'Please wait',
   }) {
     if (_loadingDialogController?.update(text) ?? false) {
       return;
@@ -31,14 +30,26 @@ class LoadingDialog {
   }
 
   LoadingDialogController showOverlay(
-      {required BuildContext context, required text}) {
+      {required BuildContext context, required String text}) {
     final textController = StreamController<String>();
     textController.add(text);
 
     final overlayState = Overlay.of(context);
-    final renderBox = context.findRenderObject() as RenderBox;
 
-    final renderSize = renderBox.size;
+    Size? size;
+    final renderObj = context.findRenderObject();
+    if (renderObj is RenderBox) {
+      size = renderObj.size;
+    } else if (renderObj is RenderSliverList) {
+      size = Size(renderObj.constraints.crossAxisExtent,
+          renderObj.constraints.viewportMainAxisExtent);
+      debugPrint('Im using sliver constraints');
+
+    } else {
+      size = const Size(400, 600);
+    }
+
+
 
     final overlayEntry = OverlayEntry(builder: (context) {
       return Material(
@@ -50,10 +61,10 @@ class LoadingDialog {
             color: Colors.white,
           ),
           constraints: BoxConstraints(
-            maxWidth: renderSize.width * 0.5,
-            minWidth: renderSize.width * 0.5,
-            maxHeight: renderSize.height * 0.2,
-            minHeight: renderSize.height * 0.2,
+            maxWidth: size!.width * 0.5,
+            minWidth: size.width * 0.5,
+            maxHeight: size.height * 0.2,
+            minHeight: size.height * 0.2,
           ),
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -61,12 +72,13 @@ class LoadingDialog {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const CircularProgressIndicator(
-
                 strokeWidth: 1,
                 strokeCap: StrokeCap.round,
                 color: AppPalette.primaryColor,
               ),
-              const SpacerBox(),
+              const SizedBox(
+                height: 8,
+              ),
               StreamBuilder(
                 stream: textController.stream,
                 builder: (context, snapshot) {
@@ -74,6 +86,10 @@ class LoadingDialog {
                     return Text(
                       snapshot.data as String,
                       overflow: TextOverflow.fade,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: Colors.black),
                     );
                   } else {
                     return Container();

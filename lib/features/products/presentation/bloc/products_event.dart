@@ -5,5 +5,6 @@ sealed class ProductsEvent {
   const ProductsEvent();
 }
 
-final class LoadProductsEvent extends ProductsEvent {}
-
+final class GetProductsEvent extends ProductsEvent {
+  const GetProductsEvent();
+}

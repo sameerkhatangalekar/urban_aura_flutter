@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urban_aura_flutter/core/usecase.dart';
@@ -18,8 +19,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       required GetProductsByIdUsecase getProductsByIdUsecase})
       : _getProductsUseCase = getProductsUsecase,
         _getProductsByIdUsecase = getProductsByIdUsecase,
-        super(const ProductsInitial()) {
-    on<LoadProductsEvent>((event, emit) async {
+        super( const ProductsInitial()) {
+    on<GetProductsEvent>((event, emit) async {
       final result = await _getProductsUseCase(const NoParams());
       result.fold(
         (l) => emit(
@@ -32,5 +33,11 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
         ),
       );
     });
+  }
+  @override
+  void onChange(Change<ProductsState> change) {
+
+    super.onChange(change);
+    debugPrint('${change.currentState.hashCode} : ${change.nextState.hashCode}');
   }
 }

@@ -2,9 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:urban_aura_flutter/core/common/widgets/custom_divider.dart';
-import 'package:urban_aura_flutter/core/common/widgets/spacer_box.dart';
+
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
+
+import 'custom_divider.dart';
+import 'spacer_box.dart';
 
 class Footer extends StatelessWidget {
   const Footer({super.key});

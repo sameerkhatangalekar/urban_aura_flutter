@@ -13,7 +13,7 @@ List<ProductModel> parseProductList(String str) => List<ProductModel>.from(
     );
 
 class ProductModel extends ProductEntity {
-  ProductModel({
+  const ProductModel({
     required super.id,
     required super.name,
     required super.brand,
@@ -92,3 +92,4 @@ class ProductModel extends ProductEntity {
     );
   }
 }
+

@@ -1,46 +1,59 @@
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urban_aura_flutter/core/config/mock_data.dart';
+import 'package:urban_aura_flutter/core/helper/color_provider.dart';
+import 'package:urban_aura_flutter/features/cart/domain/entity/cart_entity.dart';
+import 'package:urban_aura_flutter/features/cart/presentation/bloc/cart_bloc.dart';
 
 import '../../../../core/theme/app_palette.dart';
 
-class CartItem extends StatefulWidget {
-  final MockProductData productData;
-  const CartItem({super.key, required this.productData});
+class CartItemCard extends StatefulWidget {
+  final CartItem cartItem;
+
+  const CartItemCard({super.key, required this.cartItem});
 
   @override
-  State<CartItem> createState() => _CartItemState();
+  State<CartItemCard> createState() => _CartItemCardState();
 }
 
-class _CartItemState extends State<CartItem> {
-   int itemCount = 0;
+class _CartItemCardState extends State<CartItemCard> {
+  late int itemCount;
 
   @override
   void initState() {
-
+    itemCount = widget.cartItem.quantity;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    final size = MediaQuery.sizeOf(context);
+    return Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
+        constraints: BoxConstraints(
+          maxHeight: size.height * 0.2,
+          minHeight: size.height * 0.2,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               flex: 1,
-              child: Image.network(
-                widget.productData.image,
+              child: CachedNetworkImage(
+                imageUrl: widget.cartItem.product.images.first,
                 fit: BoxFit.contain,
+                placeholder: (context, _) => Container(
+                  color: getRandomColor(),
+                ),
               ),
             ),
             const SizedBox(
               width: 12,
             ),
             Expanded(
-              flex: 3,
+              flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -49,24 +62,18 @@ class _CartItemState extends State<CartItem> {
                     height: 4,
                   ),
                   Text(
-                    widget.productData.productName,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(
-                        letterSpacing: 4,
-                        color: AppPalette.titleActive),
+                    widget.cartItem.product.name,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        letterSpacing: 4, color: AppPalette.titleActive),
                   ),
                   const SizedBox(
                     height: 4,
                   ),
-                  Text(widget.productData.description,
+                  Text(widget.cartItem.product.brand,
                       style: Theme.of(context)
                           .textTheme
                           .titleSmall
-                          ?.copyWith(
-                          color: AppPalette.label,
-                          wordSpacing: 2)),
+                          ?.copyWith(color: AppPalette.label, wordSpacing: 2)),
                   const SizedBox(
                     height: 4,
                   ),
@@ -77,26 +84,30 @@ class _CartItemState extends State<CartItem> {
                         onPressed: () {
                           setState(() {
                             itemCount--;
+                            context.read<CartBloc>().add(
+                                  DecrementItemCountAction(
+                                      cartItemId: widget.cartItem.id,
+                                      quantity: itemCount),
+                                );
                           });
                         },
                         icon: const Icon(
                           Icons.remove,
-                        ), color: AppPalette.placeHolder,
+                        ),
+                        color: AppPalette.placeHolder,
                         style: ButtonStyle(
                           iconSize: const WidgetStatePropertyAll(16),
-                          maximumSize: const WidgetStatePropertyAll(
-                              Size(20, 20)),
-                          minimumSize: const WidgetStatePropertyAll(
-                              Size(20, 20)),
-                          padding: const WidgetStatePropertyAll(
-                              EdgeInsets.zero),
+                          maximumSize:
+                              const WidgetStatePropertyAll(Size(20, 20)),
+                          minimumSize:
+                              const WidgetStatePropertyAll(Size(20, 20)),
+                          padding:
+                              const WidgetStatePropertyAll(EdgeInsets.zero),
                           shape: WidgetStatePropertyAll(
                             RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(100),
                               side: const BorderSide(
-                                  color: Colors.black26,
-                                  width: 0.5),
+                                  color: Colors.black26, width: 0.5),
                             ),
                           ),
                         ),
@@ -109,8 +120,7 @@ class _CartItemState extends State<CartItem> {
                               .textTheme
                               .titleMedium
                               ?.copyWith(
-                              color: AppPalette.label,
-                              wordSpacing: 2)),
+                                  color: AppPalette.label, wordSpacing: 2)),
                       const SizedBox(
                         width: 12,
                       ),
@@ -118,8 +128,12 @@ class _CartItemState extends State<CartItem> {
                         onPressed: () {
                           setState(() {
                             itemCount++;
+                            context.read<CartBloc>().add(
+                                  IncrementItemCountAction(
+                                      cartItemId: widget.cartItem.id,
+                                      quantity: itemCount),
+                                );
                           });
-
                         },
                         color: AppPalette.placeHolder,
                         icon: const Icon(
@@ -127,19 +141,17 @@ class _CartItemState extends State<CartItem> {
                         ),
                         style: ButtonStyle(
                           iconSize: const WidgetStatePropertyAll(16),
-                          maximumSize: const WidgetStatePropertyAll(
-                              Size(20, 20)),
-                          minimumSize: const WidgetStatePropertyAll(
-                              Size(20, 20)),
-                          padding: const WidgetStatePropertyAll(
-                              EdgeInsets.zero),
+                          maximumSize:
+                              const WidgetStatePropertyAll(Size(20, 20)),
+                          minimumSize:
+                              const WidgetStatePropertyAll(Size(20, 20)),
+                          padding:
+                              const WidgetStatePropertyAll(EdgeInsets.zero),
                           shape: WidgetStatePropertyAll(
                             RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(100),
                               side: const BorderSide(
-                                  color: Colors.black26,
-                                  width: 0.5),
+                                  color: Colors.black26, width: 0.5),
                             ),
                           ),
                         ),
@@ -150,15 +162,11 @@ class _CartItemState extends State<CartItem> {
                     height: 4,
                   ),
                   Text(
-                    '\$${widget.productData.price.toStringAsFixed(0)}',
+                    '\$${widget.cartItem.product.price.toStringAsFixed(0)} x $itemCount',
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium
-                        ?.copyWith(
-                        color: AppPalette.secondaryColor),
-                  ),
-                  const SizedBox(
-                    height: 16,
+                        ?.copyWith(color: AppPalette.secondaryColor),
                   ),
                 ],
               ),

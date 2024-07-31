@@ -4,6 +4,7 @@ import 'package:urban_aura_flutter/core/common/bloc/app_user_cubit.dart';
 import 'package:urban_aura_flutter/core/constants.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 import 'package:urban_aura_flutter/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:urban_aura_flutter/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:urban_aura_flutter/features/products/presentation/bloc/products_bloc.dart';
 import 'package:urban_aura_flutter/init_dependencies.main.dart';
 
@@ -25,7 +26,16 @@ Future<void> main() async {
           create: (context) => serviceLocator<AuthBloc>(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<ProductsBloc>()..add(LoadProductsEvent()),
+          create: (context) => serviceLocator<ProductsBloc>()
+            ..add(
+              const GetProductsEvent(),
+            ),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<CartBloc>()
+            ..add(
+              const GetCartEvent(),
+            ),
         )
       ],
       child: BlocListener<AppUserCubit, AppUserState>(

@@ -1,7 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
 
-class ProductEntity {
+import 'package:equatable/equatable.dart';
+
+class ProductEntity extends Equatable {
   final String id;
   final String name;
   final String brand;
@@ -15,7 +17,7 @@ class ProductEntity {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  ProductEntity({
+  const ProductEntity({
     required this.id,
     required this.name,
     required this.brand,
@@ -29,6 +31,23 @@ class ProductEntity {
     required this.createdAt,
     required this.updatedAt,
   });
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [id,
+    name,
+    brand,
+    description,
+    price,
+    colors,
+    sizes,
+    images,
+    discount,
+    rating,
+    createdAt,
+    updatedAt,];
+  @override
+  bool get stringify => true;
   //
   // ProductEntity copyWith({
   //   String? id,

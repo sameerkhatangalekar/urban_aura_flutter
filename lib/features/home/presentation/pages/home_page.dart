@@ -8,16 +8,17 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urban_aura_flutter/core/common/bloc/app_user_cubit.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_divider.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_sliver_app_bar.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/footer.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/spacer_box.dart';
+import 'package:urban_aura_flutter/core/config/mock_data.dart';
 import 'package:urban_aura_flutter/core/helper/color_provider.dart';
+import 'package:urban_aura_flutter/core/theme/app_palette.dart';
+import 'package:urban_aura_flutter/features/home/presentation/widgets/recommendations_list.dart';
 import 'package:vector_graphics/vector_graphics.dart';
 
-import '../../../../core/common/widgets/custom_divider.dart';
-import '../../../../core/common/widgets/custom_sliver_app_bar.dart';
-import '../../../../core/common/widgets/footer.dart';
-import '../../../../core/common/widgets/spacer_box.dart';
-import '../../../../core/config/mock_data.dart';
-import '../../../../core/theme/app_palette.dart';
-import '../widgets/recommendations_list.dart';
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

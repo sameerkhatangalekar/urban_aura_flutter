@@ -61,6 +61,9 @@ class CustomSliverAppBar extends StatelessWidget {
           width: 16,
         )
       ],
+      stretch: false,
+
+    onStretchTrigger: () async => debugPrint('Called stretch'),
     );
   }
 }

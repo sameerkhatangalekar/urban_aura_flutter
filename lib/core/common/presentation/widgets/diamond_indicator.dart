@@ -1,8 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
-import '../../theme/app_palette.dart';
+import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 
 class DiamondIndicator extends StatelessWidget {
   final bool isActive;

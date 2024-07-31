@@ -1,8 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:urban_aura_flutter/core/common/widgets/diamond_indicator.dart';
-
-import '../../theme/app_palette.dart';
+import 'package:urban_aura_flutter/core/theme/app_palette.dart';
+import 'diamond_indicator.dart';
 
 class CustomDivider extends StatelessWidget {
   const CustomDivider({super.key});

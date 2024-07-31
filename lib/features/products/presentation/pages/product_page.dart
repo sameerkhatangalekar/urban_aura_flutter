@@ -1,21 +1,31 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:urban_aura_flutter/core/common/widgets/footer.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_sliver_app_bar.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/footer.dart';
+
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 import 'package:urban_aura_flutter/features/products/domain/entity/product_entity.dart';
+import 'package:urban_aura_flutter/features/products/presentation/widgets/color_selector.dart';
+import 'package:urban_aura_flutter/features/products/presentation/widgets/image_slider.dart';
+import 'package:urban_aura_flutter/features/products/presentation/widgets/size_selector.dart';
 
-import '../../../../core/common/widgets/custom_sliver_app_bar.dart';
 
-class ProductPage extends StatelessWidget {
+class ProductPage extends StatefulWidget {
   final ProductEntity productEntity;
 
   const ProductPage({super.key, required this.productEntity});
 
   @override
+  State<ProductPage> createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
+
+
+  @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
+    debugPrint('Product rendered');
     return Scaffold(
-      bottomNavigationBar:  Container(
+      bottomNavigationBar: Container(
         padding: const EdgeInsets.all(4),
         color: AppPalette.titleActive,
         child: Row(
@@ -46,42 +56,42 @@ class ProductPage extends StatelessWidget {
           ),
           SliverPadding(
             sliver: SliverToBoxAdapter(
-              child: Hero(
-                tag: productEntity.id,
-                child: CachedNetworkImage(
-                    imageUrl:  productEntity.images[0],
-                    width: size.width,
-                    height: size.height * 0.6,
-                    fit: BoxFit.contain),
-              ),
+                child: ImageSlider(
+              images: widget.productEntity.images,
+              productId: widget.productEntity.id,
+            )),
+            padding: const EdgeInsets.only(
+              top: 8,
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           ),
           SliverToBoxAdapter(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    productEntity.name,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    widget.productEntity.name,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         letterSpacing: 4, color: AppPalette.titleActive),
                   ),
                   const SizedBox(
                     height: 4,
                   ),
-                  Text(productEntity.description,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(color: AppPalette.label, wordSpacing: 2)),
+                  Text(
+                    widget.productEntity.description,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: AppPalette.label,
+                          wordSpacing: 2,
+                        ),
+                    textAlign: TextAlign.justify,
+                  ),
                   const SizedBox(
                     height: 4,
                   ),
                   Text(
-                    '\$${productEntity.price.toStringAsFixed(0)}',
+                    '\$${widget.productEntity.price.toStringAsFixed(0)}',
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
@@ -92,120 +102,11 @@ class ProductPage extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text('Color',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                  color: AppPalette.label, wordSpacing: 2)),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppPalette.placeHolder, width: 0.5),
-                            borderRadius: BorderRadius.circular(100)),
-                        padding: const EdgeInsets.all(2),
-                        child: Container(
-                          height: 16,
-                          width: 16,
-                          decoration: BoxDecoration(
-                              color: AppPalette.secondaryColor,
-                              borderRadius: BorderRadius.circular(100)),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppPalette.placeHolder, width: 0.5),
-                            borderRadius: BorderRadius.circular(100)),
-                        padding: const EdgeInsets.all(2),
-                        child: Container(
-                          height: 16,
-                          width: 16,
-                          decoration: BoxDecoration(
-                              color: AppPalette.label,
-                              borderRadius: BorderRadius.circular(100)),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppPalette.placeHolder, width: 0.5),
-                            borderRadius: BorderRadius.circular(100)),
-                        padding: const EdgeInsets.all(2),
-                        child: Container(
-                          height: 16,
-                          width: 16,
-                          decoration: BoxDecoration(
-                              color: AppPalette.placeHolder,
-                              borderRadius: BorderRadius.circular(100)),
-                        ),
-                      ),
+                      ColorSelector(colors: widget.productEntity.colors),
                       const SizedBox(
                         width: 20,
                       ),
-                      Text('Size',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                  color: AppPalette.label, wordSpacing: 2)),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Container(
-                        height: 24,
-                        width: 24,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppPalette.placeHolder, width: 0.5),
-                            borderRadius: BorderRadius.circular(100)),
-                        padding: const EdgeInsets.all(2),
-                        child: const Center(
-                          child: Center(child: Text('S')),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Container(
-                        height: 24,
-                        width: 24,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppPalette.placeHolder, width: 0.5),
-                            borderRadius: BorderRadius.circular(100)),
-                        padding: const EdgeInsets.all(2),
-                        child: const Center(
-                          child: Center(child: Text('M')),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Container(
-                        height: 24,
-                        width: 24,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppPalette.placeHolder, width: 0.5),
-                            borderRadius: BorderRadius.circular(100)),
-                        padding: const EdgeInsets.all(2),
-                        child: const Center(
-                          child: Center(child: Text('L')),
-                        ),
-                      ),
+                      SizeSelector(sizes: widget.productEntity.sizes)
                     ],
                   ),
                 ],

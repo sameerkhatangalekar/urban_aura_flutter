@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:urban_aura_flutter/core/common/widgets/custom_divider.dart';
-import 'package:urban_aura_flutter/core/common/widgets/spacer_box.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_divider.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/spacer_box.dart';
+
 
 import '../../../../core/config/mock_data.dart';
 import '../../../../core/theme/app_palette.dart';

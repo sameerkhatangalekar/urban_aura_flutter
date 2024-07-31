@@ -3,11 +3,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:urban_aura_flutter/core/common/dialogs/loading_dialog.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/spacer_box.dart';
+import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 import 'package:urban_aura_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 
-import '../../../../core/common/dialogs/loading_dialog.dart';
-import '../../../../core/common/widgets/spacer_box.dart';
-import '../../../../core/theme/app_palette.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});

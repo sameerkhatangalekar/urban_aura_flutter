@@ -1,9 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:urban_aura_flutter/core/common/widgets/custom_divider.dart';
-import '../../../../core/common/widgets/spacer_box.dart';
-import '../../../../core/config/mock_data.dart';
-import '../../../../core/theme/app_palette.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_divider.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/spacer_box.dart';
+import 'package:urban_aura_flutter/core/config/mock_data.dart';
+import 'package:urban_aura_flutter/core/theme/app_palette.dart';
+
 
 class RecommendationsList extends StatefulWidget {
   const RecommendationsList({super.key});
