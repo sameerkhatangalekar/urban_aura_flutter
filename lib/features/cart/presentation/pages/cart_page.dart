@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:urban_aura_flutter/core/common/bloc/cart/cart_state.dart';
 import 'package:urban_aura_flutter/core/common/dialogs/loading_dialog.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_divider.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
-import 'package:urban_aura_flutter/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:urban_aura_flutter/core/common/bloc/cart/cart_bloc.dart';
 import 'package:urban_aura_flutter/features/cart/presentation/widgets/cart_item.dart';
 
 class CartPage extends StatelessWidget {
@@ -13,6 +14,9 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<CartBloc>().add(
+          const GetCartEvent(),
+        );
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       bottomNavigationBar: BlocBuilder<CartBloc, CartState>(
@@ -190,7 +194,6 @@ class CartPage extends StatelessWidget {
                       );
                     });
               }
-
               if (state is CartFailedState) {
                 return const SliverToBoxAdapter(
                   child: Center(
@@ -201,7 +204,6 @@ class CartPage extends StatelessWidget {
                   ),
                 );
               }
-
               return const SliverToBoxAdapter();
             },
             buildWhen: (prev, curr) {
@@ -222,18 +224,19 @@ class CartPage extends StatelessWidget {
                 );
               }
               if (state is CartActionLoadingState) {
-                LoadingDialog().show(context: context,);
+                LoadingDialog().show(
+                  context: context,
+                );
               }
 
               if (state is IncrementItemCountActionSuccessState) {
                 LoadingDialog().hide();
-
               }
               if (state is DecrementItemCountActionSuccessState) {
                 LoadingDialog().hide();
               }
 
-              if (state is IncrementItemCountActionFailedState ) {
+              if (state is IncrementItemCountActionFailedState) {
                 LoadingDialog().hide();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -241,7 +244,7 @@ class CartPage extends StatelessWidget {
                   ),
                 );
               }
-              if (state is DecrementItemCountActionFailedState ) {
+              if (state is DecrementItemCountActionFailedState) {
                 LoadingDialog().hide();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

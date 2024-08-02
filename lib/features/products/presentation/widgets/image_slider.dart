@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/diamond_indicator.dart';
 import 'package:urban_aura_flutter/core/helper/color_provider.dart';
 
-
-
 class ImageSlider extends StatefulWidget {
   final String productId;
   final List<String> images;
-  const ImageSlider({super.key,required this.images,required this.productId});
+
+  const ImageSlider({super.key, required this.images, required this.productId});
 
   @override
   State<ImageSlider> createState() => _ImageSliderState();
@@ -17,9 +16,9 @@ class ImageSlider extends StatefulWidget {
 
 class _ImageSliderState extends State<ImageSlider> {
   int currentImageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    debugPrint('images rendered');
     final size = MediaQuery.sizeOf(context);
     return Column(
       children: [
@@ -27,12 +26,20 @@ class _ImageSliderState extends State<ImageSlider> {
           tag: widget.productId,
           child: CarouselSlider.builder(
             itemCount: widget.images.length,
-            itemBuilder:
-                (BuildContext context, int index, int realIndex) {
+            itemBuilder: (BuildContext context, int index, int realIndex) {
               return CachedNetworkImage(
                 imageUrl: widget.images[index],
                 width: size.width,
                 fit: BoxFit.contain,
+                errorWidget: (context, _, __) => Container(
+                  color: getRandomColor(),
+                  child: const Center(
+                    child: Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
                 placeholder: (context, value) => Container(
                   color: getRandomColor(),
                 ),

@@ -1,4 +1,4 @@
-import 'package:urban_aura_flutter/features/cart/domain/entity/cart_entity.dart';
+import 'package:urban_aura_flutter/core/common/domain/entities/cart_entity.dart';
 
 final class CartModel extends CartEntity {
   CartModel({required super.cartTotal, required super.cart});

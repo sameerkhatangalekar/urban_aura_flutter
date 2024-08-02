@@ -66,6 +66,15 @@ class ProductsPage extends StatelessWidget {
                                   child: CachedNetworkImage(
                                     imageUrl: product.images[0],
                                     fit: BoxFit.contain,
+                                    errorWidget: (context, _, __) => Container(
+                                      color: getRandomColor(),
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.error_outline,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
                                     placeholder: (ctx, value) {
                                       return Container(
                                         color: getRandomColor(),
@@ -126,7 +135,9 @@ class ProductsPage extends StatelessWidget {
 
                 return const SliverToBoxAdapter();
               },
-              listener: (BuildContext context, ProductsState state) {},
+              listener: (BuildContext context, ProductsState state) {
+
+              },
             )
           ],
         ),

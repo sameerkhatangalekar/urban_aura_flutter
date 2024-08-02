@@ -1,29 +1,30 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/add_to_cart_usecase.dart';
 import 'package:urban_aura_flutter/features/auth/data/datasource/auth_remote_data_source_impl.dart';
 import 'package:urban_aura_flutter/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:urban_aura_flutter/features/auth/domain/repository/auth_repository.dart';
 import 'package:urban_aura_flutter/features/auth/domain/usecases/signin_usecase.dart';
 import 'package:urban_aura_flutter/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:urban_aura_flutter/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:urban_aura_flutter/features/cart/data/datasources/cart_remote_datasource.dart';
-import 'package:urban_aura_flutter/features/cart/data/datasources/cart_remote_datasource_impl.dart';
-import 'package:urban_aura_flutter/features/cart/data/repository/cart_repository_impl.dart';
-import 'package:urban_aura_flutter/features/cart/domain/repository/cart_repository.dart';
-import 'package:urban_aura_flutter/features/cart/domain/usecase/decrement_cart_item_count_usecase.dart';
-import 'package:urban_aura_flutter/features/cart/domain/usecase/get_cart_usecase.dart';
-import 'package:urban_aura_flutter/features/cart/domain/usecase/increment_cart_item_count_usecase.dart';
-import 'package:urban_aura_flutter/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:urban_aura_flutter/core/common/data/datasources/cart_remote_datasource.dart';
+import 'package:urban_aura_flutter/core/common/data/datasources/cart_remote_datasource_impl.dart';
+import 'package:urban_aura_flutter/core/common/data/repository/cart_repository_impl.dart';
+import 'package:urban_aura_flutter/core/common/domain/repository/cart_repository.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/decrement_cart_item_count_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/get_cart_usecase.dart';
+import 'package:urban_aura_flutter/core/common/bloc/cart/cart_bloc.dart';
 import 'package:urban_aura_flutter/features/products/domain/usecase/get_product_by_id_usecase.dart';
 import 'package:urban_aura_flutter/features/products/domain/usecase/get_products_usecase.dart';
 import 'package:urban_aura_flutter/features/products/presentation/bloc/products_bloc.dart';
-import 'core/common/bloc/app_user_cubit.dart';
-import 'core/router/router.dart';
-import 'features/products/data/datasource/products_remote_data_source.dart';
-import 'features/products/data/datasource/products_remote_data_source_impl.dart';
-import 'features/products/data/repository/products_repository_impl.dart';
-import 'features/products/domain/repository/products_repository.dart';
+import 'package:urban_aura_flutter/core/common/bloc/app_user_cubit.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/increment_cart_item_count_usecase.dart';
+import 'package:urban_aura_flutter/core/router/router.dart';
+import 'package:urban_aura_flutter/features/products/data/datasource/products_remote_data_source.dart';
+import 'package:urban_aura_flutter/features/products/data/datasource/products_remote_data_source_impl.dart';
+import 'package:urban_aura_flutter/features/products/data/repository/products_repository_impl.dart';
+import 'package:urban_aura_flutter/features/products/domain/repository/products_repository.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -160,22 +161,27 @@ void initCartBloc() {
         cartRepository: serviceLocator(),
       ),
     )
-
     ..registerLazySingleton<IncrementCartItemCountUsecase>(
-          () => IncrementCartItemCountUsecase(
+      () => IncrementCartItemCountUsecase(
         cartRepository: serviceLocator(),
       ),
     )
     ..registerLazySingleton<DecrementCartItemCountUsecase>(
-          () => DecrementCartItemCountUsecase(
+      () => DecrementCartItemCountUsecase(
+        cartRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<AddToCartUsecase>(
+          () => AddToCartUsecase(
         cartRepository: serviceLocator(),
       ),
     )
     ..registerLazySingleton<CartBloc>(
       () => CartBloc(
-        getCartUsecase: serviceLocator(),
-        incrementCartItemCountUsecase: serviceLocator(),
-        decrementCartItemCountUsecase: serviceLocator()
+          getCartUsecase: serviceLocator(),
+          incrementCartItemCountUsecase: serviceLocator(),
+          decrementCartItemCountUsecase: serviceLocator(),
+          addToCartUsecase: serviceLocator()
       ),
     );
 }

@@ -1,8 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:urban_aura_flutter/core/error/failure.dart';
 import 'package:urban_aura_flutter/core/usecase.dart';
-import 'package:urban_aura_flutter/features/cart/domain/entity/cart_entity.dart';
-import 'package:urban_aura_flutter/features/cart/domain/repository/cart_repository.dart';
+import 'package:urban_aura_flutter/core/common/domain/entities/cart_entity.dart';
+import 'package:urban_aura_flutter/core/common/domain/repository/cart_repository.dart';
 
 final class GetCartUsecase implements UseCase<CartEntity, NoParams> {
   final CartRepository _cartRepository;

@@ -1,4 +1,5 @@
-part of 'cart_bloc.dart';
+import 'package:flutter/foundation.dart';
+import 'package:urban_aura_flutter/core/common/domain/entities/cart_entity.dart';
 
 @immutable
 sealed class CartState {
@@ -59,6 +60,22 @@ final class DecrementItemCountActionFailedState extends CartState {
   final String message;
 
   const DecrementItemCountActionFailedState({
+    required this.message,
+  });
+}
+
+final class AddToCartActionSuccessState extends CartState {
+  final String message;
+
+  const AddToCartActionSuccessState({
+    required this.message,
+  });
+}
+
+final class AddToCartActionFailedState extends CartState {
+  final String message;
+
+  const AddToCartActionFailedState({
     required this.message,
   });
 }

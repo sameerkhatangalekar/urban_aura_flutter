@@ -1,5 +1,5 @@
 import 'package:urban_aura_flutter/core/common/data/models/success_model.dart';
-import 'package:urban_aura_flutter/features/cart/data/model/cart_model.dart';
+import 'package:urban_aura_flutter/core/common/data/models/cart_model.dart';
 
 abstract interface class CartRemoteDatasource {
   Future<CartModel> getCart();
@@ -12,5 +12,12 @@ abstract interface class CartRemoteDatasource {
   Future<SuccessModel> decrementItemCount({
     required String id,
     required int quantity,
+  });
+
+  Future<SuccessModel> addToCart({
+    required String productId,
+    required int quantity,
+    required String size,
+    required String color,
   });
 }

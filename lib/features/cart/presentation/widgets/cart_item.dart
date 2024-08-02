@@ -1,10 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:urban_aura_flutter/core/config/mock_data.dart';
 import 'package:urban_aura_flutter/core/helper/color_provider.dart';
-import 'package:urban_aura_flutter/features/cart/domain/entity/cart_entity.dart';
-import 'package:urban_aura_flutter/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:urban_aura_flutter/core/common/domain/entities/cart_entity.dart';
+import 'package:urban_aura_flutter/core/common/bloc/cart/cart_bloc.dart';
 
 import '../../../../core/theme/app_palette.dart';
 
@@ -82,14 +81,18 @@ class _CartItemCardState extends State<CartItemCard> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          setState(() {
-                            itemCount--;
-                            context.read<CartBloc>().add(
-                                  DecrementItemCountAction(
-                                      cartItemId: widget.cartItem.id,
-                                      quantity: itemCount),
-                                );
-                          });
+                          setState(
+                            () {
+                              if (itemCount > 1) {
+                                itemCount--;
+                                context.read<CartBloc>().add(
+                                      DecrementItemCountAction(
+                                          cartItemId: widget.cartItem.id,
+                                          quantity: itemCount),
+                                    );
+                              }
+                            },
+                          );
                         },
                         icon: const Icon(
                           Icons.remove,
