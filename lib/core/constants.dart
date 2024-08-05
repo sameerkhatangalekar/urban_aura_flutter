@@ -10,3 +10,5 @@ const String productUrl = '$ip/products';
 const String cartUrl = '$ip/cart';
 const String incrementCartItemCountUrl = '$cartUrl/increment';
 const String decrementCartItemCountUrl = '$cartUrl/decrement';
+const String algoliaAppId = 'DELC2LAXC9';
+const String algoliaSearchKey = '6020027d9edaca8b4a7cc457944e661d';

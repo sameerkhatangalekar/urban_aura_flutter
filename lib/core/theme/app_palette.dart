@@ -38,6 +38,9 @@ sealed class AppThemeData {
       backgroundColor: Colors.white,
       centerTitle: true,
     ),
+    searchBarTheme: const SearchBarThemeData(
+      textStyle: WidgetStatePropertyAll(TextStyle(color: Colors.black))
+    ),
     inputDecorationTheme: InputDecorationTheme(
       isDense: true,
       hintStyle: const TextStyle(color: Colors.white70),
@@ -49,6 +52,7 @@ sealed class AppThemeData {
         borderSide:
         const BorderSide(color: Colors.white12, width: 1),
       ),
+
       errorStyle: const TextStyle(color: Colors.redAccent),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4),

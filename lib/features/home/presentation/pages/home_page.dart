@@ -52,7 +52,9 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
+
         body: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
           slivers: [
             const CustomSliverAppBar(),
             SliverToBoxAdapter(

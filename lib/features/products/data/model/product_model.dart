@@ -12,7 +12,7 @@ List<ProductModel> parseProductList(String str) => List<ProductModel>.from(
           ),
     );
 
-class ProductModel extends ProductEntity {
+class ProductModel extends ProductEntity{
   const ProductModel({
     required super.id,
     required super.name,
@@ -62,6 +62,23 @@ class ProductModel extends ProductEntity {
     );
   }
 
+  factory ProductModel.fromAlgoliaResponse(Map<String, dynamic> map) {
+    return ProductModel(
+      id: map['objectID'],
+      name: map['name'],
+      brand: map['brand'],
+      description: map['description'],
+      price: map['price'].toDouble(),
+      colors: List<String>.from(map['colors']),
+      sizes: List<String>.from(map['sizes']),
+      images: List<String>.from(map['images']),
+      discount: map['discount'],
+      rating: map['rating'].toDouble(),
+      createdAt: DateTime.parse(map['createdAt']),
+      updatedAt: DateTime.parse(map['updatedAt']),
+    );
+  }
+
   ProductModel copyWith({
     String? id,
     String? name,
@@ -92,4 +109,3 @@ class ProductModel extends ProductEntity {
     );
   }
 }
-

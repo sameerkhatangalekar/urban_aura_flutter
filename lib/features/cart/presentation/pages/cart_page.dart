@@ -177,10 +177,8 @@ class CartPage extends StatelessWidget {
                         : state.cartEntity.cart.length,
                     itemBuilder: (context, index) {
                       if (state.cartEntity.cart.isEmpty) {
-                        return const SliverToBoxAdapter(
-                          child: Center(
-                            child: Text('Cart is empty'),
-                          ),
+                        return const Center(
+                          child: Text('Cart is empty'),
                         );
                       }
 

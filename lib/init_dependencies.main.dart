@@ -1,7 +1,9 @@
+import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/add_to_cart_usecase.dart';
+import 'package:urban_aura_flutter/core/constants.dart';
 import 'package:urban_aura_flutter/features/auth/data/datasource/auth_remote_data_source_impl.dart';
 import 'package:urban_aura_flutter/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:urban_aura_flutter/features/auth/domain/repository/auth_repository.dart';
@@ -144,6 +146,15 @@ void initProductsBloc() {
     );
 }
 
+// void initAlgolia() {
+//   serviceLocator.registerLazySingleton(
+//     () => HitsSearcher(
+//         applicationID: algoliaAppId,
+//         apiKey: algoliaSearchKey,
+//         indexName: 'products'),
+//   );
+// }
+
 void initCartBloc() {
   serviceLocator
     ..registerLazySingleton<CartRemoteDatasource>(
@@ -172,7 +183,7 @@ void initCartBloc() {
       ),
     )
     ..registerLazySingleton<AddToCartUsecase>(
-          () => AddToCartUsecase(
+      () => AddToCartUsecase(
         cartRepository: serviceLocator(),
       ),
     )
@@ -181,7 +192,6 @@ void initCartBloc() {
           getCartUsecase: serviceLocator(),
           incrementCartItemCountUsecase: serviceLocator(),
           decrementCartItemCountUsecase: serviceLocator(),
-          addToCartUsecase: serviceLocator()
-      ),
+          addToCartUsecase: serviceLocator()),
     );
 }
