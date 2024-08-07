@@ -37,6 +37,7 @@ Map<String, String> colorMap = {
   "cocoa brown": "#4e3a26",
   "beige": "#f5f5dc",
   "pink": "#ffc0cb",
+  "pink satin" :  "#ffc0cb",
   "white": "#ffffff",
   "floral": "#c0c0c0",
   "floral black": "#000000",

@@ -68,4 +68,14 @@ class CartRemoteDatasourceImpl implements CartRemoteDatasource {
       throw ServerException(dioErrorProcessor(error));
     }
   }
+
+  @override
+  Future<SuccessModel> removeFromCart({required String cartItemId}) async {
+    try {
+      final response = await _dio.delete('$cartUrl/$cartItemId');
+      return SuccessModel.fromJson(response.data);
+    } on DioException catch (error) {
+      throw ServerException(dioErrorProcessor(error));
+    }
+  }
 }

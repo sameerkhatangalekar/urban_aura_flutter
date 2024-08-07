@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_circular_progress_indicator.dart';
 import 'package:urban_aura_flutter/core/helper/loading_dialog_controller.dart';
-import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 
 class LoadingDialog {
   static final LoadingDialog _shared = LoadingDialog._();
@@ -71,11 +71,7 @@ class LoadingDialog {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const CircularProgressIndicator(
-                strokeWidth: 1,
-                strokeCap: StrokeCap.round,
-                color: AppPalette.primaryColor,
-              ),
+              const CustomCircularProgressIndicator(),
               const SizedBox(
                 height: 8,
               ),

@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/add_to_cart_usecase.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/get_cart_usecase.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/increment_cart_item_count_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/remove_from_cart_usecase.dart';
 import 'package:urban_aura_flutter/core/extensions.dart';
 import 'package:urban_aura_flutter/core/usecase.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/decrement_cart_item_count_usecase.dart';
@@ -22,15 +23,18 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   final IncrementCartItemCountUsecase _incrementCartItemCountUsecase;
   final DecrementCartItemCountUsecase _decrementCartItemCountUsecase;
   final AddToCartUsecase _addToCartUsecase;
+  final RemoveFromCartUsecase _removeFromCartUsecase;
 
   CartBloc(
       {required GetCartUsecase getCartUsecase,
       required DecrementCartItemCountUsecase decrementCartItemCountUsecase,
       required IncrementCartItemCountUsecase incrementCartItemCountUsecase,
+      required RemoveFromCartUsecase removeFromCartUsecase,
       required AddToCartUsecase addToCartUsecase})
       : _getCartUsecase = getCartUsecase,
         _decrementCartItemCountUsecase = decrementCartItemCountUsecase,
         _incrementCartItemCountUsecase = incrementCartItemCountUsecase,
+        _removeFromCartUsecase = removeFromCartUsecase,
         _addToCartUsecase = addToCartUsecase,
         super(const CartInitial()) {
     on<GetCartEvent>((event, emit) async {
@@ -64,6 +68,23 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           (l) => emit(IncrementItemCountActionFailedState(message: l.message)),
           (r) {
             emit(IncrementItemCountActionSuccessState(message: r.message));
+            add(const GetCartEvent());
+          },
+        );
+      },
+      transformer: debounce(
+        const Duration(milliseconds: 300),
+      ),
+    );
+    on<RemoveFromCartActionEvent>(
+      (event, emit) async {
+        emit(const CartActionLoadingState());
+        final result = await _removeFromCartUsecase(event.cartItemId);
+
+        result.fold(
+          (l) => emit(RemoveFromCartActionFailedState(message: l.message)),
+          (r) {
+            emit(RemoveFromCartActionSuccessState(message: r.message));
             add(const GetCartEvent());
           },
         );

@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:urban_aura_flutter/core/error/failure.dart';
 import 'package:urban_aura_flutter/core/usecase.dart';
-import 'package:urban_aura_flutter/features/products/domain/entity/product_entity.dart';
+import 'package:urban_aura_flutter/core/common/domain/entities/product_entity.dart';
 import 'package:urban_aura_flutter/features/products/domain/repository/products_repository.dart';
 
 final class GetProductsUsecase

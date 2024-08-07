@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/add_to_cart_usecase.dart';
-import 'package:urban_aura_flutter/core/constants.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/remove_from_cart_usecase.dart';
 import 'package:urban_aura_flutter/features/auth/data/datasource/auth_remote_data_source_impl.dart';
 import 'package:urban_aura_flutter/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:urban_aura_flutter/features/auth/domain/repository/auth_repository.dart';
@@ -27,12 +27,20 @@ import 'package:urban_aura_flutter/features/products/data/datasource/products_re
 import 'package:urban_aura_flutter/features/products/data/datasource/products_remote_data_source_impl.dart';
 import 'package:urban_aura_flutter/features/products/data/repository/products_repository_impl.dart';
 import 'package:urban_aura_flutter/features/products/domain/repository/products_repository.dart';
+import 'package:urban_aura_flutter/features/search/data/datasource/search_data_source.dart';
+import 'package:urban_aura_flutter/features/search/data/datasource/search_data_source_impl.dart';
+import 'package:urban_aura_flutter/features/search/data/repository/search_repository_impl.dart';
+import 'package:urban_aura_flutter/features/search/domain/repository/search_repository.dart';
+import 'package:urban_aura_flutter/features/search/presentation/bloc/search_bloc.dart';
+
+import 'core/constants.dart';
 
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
   await initDioClient();
   initAuth();
+  initSearchBloc();
   initProductsBloc();
   initCartBloc();
 }
@@ -146,14 +154,35 @@ void initProductsBloc() {
     );
 }
 
-// void initAlgolia() {
-//   serviceLocator.registerLazySingleton(
-//     () => HitsSearcher(
-//         applicationID: algoliaAppId,
-//         apiKey: algoliaSearchKey,
-//         indexName: 'products'),
-//   );
-// }
+void initSearchBloc() {
+  serviceLocator
+    ..registerLazySingleton<HitsSearcher>(
+      () => HitsSearcher(
+        applicationID: algoliaAppId,
+        apiKey: algoliaSearchKey,
+        indexName: 'products',
+      ),
+    )
+    ..registerLazySingleton<FilterState>(
+      () => FilterState(),
+    )
+    ..registerLazySingleton<SearchDataSource>(
+      () => SearchDataSourceImpl(
+        productSearcher: serviceLocator(),
+        filterState: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<SearchRepository>(
+      () => SearchRepositoryImpl(
+        searchDataSource: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<SearchBloc>(
+      () => SearchBloc(
+        searchRepository: serviceLocator(),
+      ),
+    );
+}
 
 void initCartBloc() {
   serviceLocator
@@ -187,11 +216,18 @@ void initCartBloc() {
         cartRepository: serviceLocator(),
       ),
     )
+    ..registerLazySingleton<RemoveFromCartUsecase>(
+      () => RemoveFromCartUsecase(
+        cartRepository: serviceLocator(),
+      ),
+    )
     ..registerLazySingleton<CartBloc>(
       () => CartBloc(
-          getCartUsecase: serviceLocator(),
-          incrementCartItemCountUsecase: serviceLocator(),
-          decrementCartItemCountUsecase: serviceLocator(),
-          addToCartUsecase: serviceLocator()),
+        removeFromCartUsecase: serviceLocator(),
+        getCartUsecase: serviceLocator(),
+        incrementCartItemCountUsecase: serviceLocator(),
+        decrementCartItemCountUsecase: serviceLocator(),
+        addToCartUsecase: serviceLocator(),
+      ),
     );
 }

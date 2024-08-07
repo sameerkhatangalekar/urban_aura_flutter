@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urban_aura_flutter/core/common/bloc/cart/cart_state.dart';
 import 'package:urban_aura_flutter/core/common/dialogs/loading_dialog.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_circular_progress_indicator.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_divider.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 import 'package:urban_aura_flutter/core/common/bloc/cart/cart_bloc.dart';
@@ -151,24 +152,29 @@ class CartPage extends StatelessWidget {
         },
       ),
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             floating: true,
+            stretch: true,
+            centerTitle: true,
             leading: IconButton(
                 onPressed: () => context.pop(), icon: const Icon(Icons.close)),
             title: const Text(
               'CART',
               style: TextStyle(letterSpacing: 4),
             ),
+              stretchTriggerOffset: 5,
+              onStretchTrigger: () async {
+                context.read<CartBloc>().add(
+                  const GetCartEvent(),
+                );
+              }
           ),
           BlocConsumer<CartBloc, CartState>(
             builder: (context, state) {
               if (state is CartLoadingState) {
-                return const CircularProgressIndicator(
-                  strokeWidth: 1,
-                  strokeCap: StrokeCap.round,
-                  color: AppPalette.primaryColor,
-                );
+                return const CustomCircularProgressIndicator();
               }
               if (state is CartSuccessState) {
                 return SliverList.separated(
@@ -226,6 +232,26 @@ class CartPage extends StatelessWidget {
                   context: context,
                 );
               }
+              if (state is RemoveFromCartActionSuccessState) {
+                LoadingDialog().hide();
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                    ),
+                  );
+              }
+              if (state is RemoveFromCartActionFailedState) {
+                LoadingDialog().hide();
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                    ),
+                  );
+              }
 
               if (state is IncrementItemCountActionSuccessState) {
                 LoadingDialog().hide();
@@ -236,19 +262,23 @@ class CartPage extends StatelessWidget {
 
               if (state is IncrementItemCountActionFailedState) {
                 LoadingDialog().hide();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                  ),
-                );
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                    ),
+                  );
               }
               if (state is DecrementItemCountActionFailedState) {
                 LoadingDialog().hide();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                  ),
-                );
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                    ),
+                  );
               }
             },
           )

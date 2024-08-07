@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:urban_aura_flutter/core/constants.dart';
 import 'package:urban_aura_flutter/core/error/exceptions.dart';
 import 'package:urban_aura_flutter/core/helper/error_processor.dart';
-import 'package:urban_aura_flutter/features/products/data/model/product_model.dart';
+import 'package:urban_aura_flutter/core/common/data/models/product_model.dart';
 
 import 'products_remote_data_source.dart';
 

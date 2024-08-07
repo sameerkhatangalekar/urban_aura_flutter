@@ -19,80 +19,80 @@ class MockProductData {
       required this.description});
 }
 
-const homePageProducts = [
-  MockProductData(
-    id: 1,
-      image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
-      productName: '21WN',
-      description: 'Reversible angora cardigan',
-      price: 120),
-  MockProductData(
-      id: 2,
-      image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
-      productName: '21WN',
-      description: 'Reversible angora cardigan',
-      price: 120),
-  MockProductData(
-      id: 3,
-      image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
-      productName: '21WN',
-      description: 'Reversible angora cardigan',
-      price: 120),
-  MockProductData(
-      id: 4,
-      image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
-      productName: 'Oblong bag',
-      description: '',
-      price: 120),
-  MockProductData(
-      id: 5,
-      image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
-      productName: '21WN',
-      description: 'Reversible angora cardigan',
-      price: 120),
-  MockProductData(
-      id: 6,
-      image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
-      productName: '21WN',
-      description: 'Reversible angora cardigan',
-      price: 120),
-  MockProductData(
-      id: 7,
-      image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
-      productName: '21WN',
-      description: 'Reversible angora cardigan',
-      price: 120),
-  MockProductData(
-      id: 8,
-      image:'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
-      productName: 'Oblong bag',
-      description: '',
-      price: 120),
-  MockProductData(
-      id: 9,
-      image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
-      productName: '21WN',
-      description: 'Reversible angora cardigan',
-      price: 120),
-  MockProductData(
-      id: 10,
-      image:'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
-      productName: '21WN',
-      description: 'Reversible angora cardigan',
-      price: 120),
-  MockProductData(
-      id: 11,
-      image:'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
-      productName: '21WN',
-      description: 'Reversible angora cardigan',
-      price: 120),
-  MockProductData(
-      id: 12,
-      image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
-      productName: 'Oblong bag',
-      description: '',
-      price: 120)
-];
+// const homePageProducts = [
+//   MockProductData(
+//     id: 1,
+//       image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
+//       productName: '21WN',
+//       description: 'Reversible angora cardigan',
+//       price: 120),
+//   MockProductData(
+//       id: 2,
+//       image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
+//       productName: '21WN',
+//       description: 'Reversible angora cardigan',
+//       price: 120),
+//   MockProductData(
+//       id: 3,
+//       image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
+//       productName: '21WN',
+//       description: 'Reversible angora cardigan',
+//       price: 120),
+//   MockProductData(
+//       id: 4,
+//       image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
+//       productName: 'Oblong bag',
+//       description: '',
+//       price: 120),
+//   MockProductData(
+//       id: 5,
+//       image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
+//       productName: '21WN',
+//       description: 'Reversible angora cardigan',
+//       price: 120),
+//   MockProductData(
+//       id: 6,
+//       image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
+//       productName: '21WN',
+//       description: 'Reversible angora cardigan',
+//       price: 120),
+//   MockProductData(
+//       id: 7,
+//       image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
+//       productName: '21WN',
+//       description: 'Reversible angora cardigan',
+//       price: 120),
+//   MockProductData(
+//       id: 8,
+//       image:'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
+//       productName: 'Oblong bag',
+//       description: '',
+//       price: 120),
+//   MockProductData(
+//       id: 9,
+//       image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
+//       productName: '21WN',
+//       description: 'Reversible angora cardigan',
+//       price: 120),
+//   MockProductData(
+//       id: 10,
+//       image:'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
+//       productName: '21WN',
+//       description: 'Reversible angora cardigan',
+//       price: 120),
+//   MockProductData(
+//       id: 11,
+//       image:'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
+//       productName: '21WN',
+//       description: 'Reversible angora cardigan',
+//       price: 120),
+//   MockProductData(
+//       id: 12,
+//       image: 'https://i.postimg.cc/J1QNKsh3/beige-winter-jacket1.webp',
+//       productName: 'Oblong bag',
+//       description: '',
+//       price: 120)
+// ];
 
 class MockAddress {
   final String name;

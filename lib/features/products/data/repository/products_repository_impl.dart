@@ -3,7 +3,7 @@ import 'package:urban_aura_flutter/core/error/exceptions.dart';
 import 'package:urban_aura_flutter/core/error/failure.dart';
 import 'package:urban_aura_flutter/features/products/data/datasource/products_remote_data_source.dart';
 
-import 'package:urban_aura_flutter/features/products/domain/entity/product_entity.dart';
+import 'package:urban_aura_flutter/core/common/domain/entities/product_entity.dart';
 
 import '../../domain/repository/products_repository.dart';
 

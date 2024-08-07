@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_sliver_app_bar.dart';
 import 'package:urban_aura_flutter/features/products/presentation/bloc/products_bloc.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/product_card.dart';
@@ -12,15 +11,14 @@ class ProductsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
-      body: RefreshIndicator(
-        onRefresh: () async => context.read<ProductsBloc>().add(
-              const GetProductsEvent(),
-            ),
-        child: CustomScrollView(
+        extendBody: true,
+        body: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
           slivers: [
-            const CustomSliverAppBar(
+            CustomSliverAppBar(
               showBackButton: true,
+              refreshCallback: () =>
+                  context.read<ProductsBloc>().add(const GetProductsEvent()),
             ),
             BlocBuilder<ProductsBloc, ProductsState>(
               builder: (context, state) {
@@ -49,13 +47,7 @@ class ProductsPage extends StatelessWidget {
                         }
 
                         final product = state.products[index];
-                        return GestureDetector(
-                          onTap: () => context.push(
-                            '/products/${product.name}',
-                            extra: product,
-                          ),
-                          child: ProductCard(product: product),
-                        );
+                        return ProductCard(product: product);
                       },
                     ),
                   );
@@ -78,8 +70,6 @@ class ProductsPage extends StatelessWidget {
               },
             )
           ],
-        ),
-      ),
-    );
+        ));
   }
 }

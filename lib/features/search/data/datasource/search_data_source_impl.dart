@@ -1,6 +1,5 @@
 import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
-import 'package:urban_aura_flutter/features/products/data/model/product_model.dart';
-import 'package:urban_aura_flutter/features/products/domain/entity/product_entity.dart';
+import 'package:urban_aura_flutter/core/common/data/models/product_model.dart';
 
 import 'search_data_source.dart';
 
@@ -18,9 +17,9 @@ class SearchDataSourceImpl implements SearchDataSource {
     _brandFacetList = _productSearcher.buildFacetList(
         filterState: _filterState, attribute: 'brand');
     _sizeFacetList = _productSearcher.buildFacetList(
-        filterState: _filterState, attribute: 'size');
+        filterState: _filterState, attribute: 'sizes');
     _colorFacetList = _productSearcher.buildFacetList(
-        filterState: _filterState, attribute: 'color');
+        filterState: _filterState, attribute: 'colors');
     _productSearcher.connectFilterState(_filterState);
   }
 
@@ -32,17 +31,10 @@ class SearchDataSourceImpl implements SearchDataSource {
   Stream<List<SelectableFacet>> get brandFacet => _brandFacetList.facets;
 
   @override
-  Stream<List<SelectableFacet>> get colorFacet => _brandFacetList.facets;
+  Stream<List<SelectableFacet>> get colorFacet => _colorFacetList.facets;
 
   @override
-
-  Stream<List<ProductEntity>> get products =>
-      _productSearcher.responses.map((response) =>
-          response.hits.map(ProductModel.fromAlgoliaResponse).toList());
-
-  @override
-  // TODO: implement sizeFacet
-  Stream<List<SelectableFacet>> get sizeFacet => throw UnimplementedError();
+  Stream<List<SelectableFacet>> get sizeFacet => _sizeFacetList.facets;
 
   @override
   void clearFilters() {
@@ -52,16 +44,29 @@ class SearchDataSourceImpl implements SearchDataSource {
 
   @override
   void toggleBrand({required String brand}) {
-    // TODO: implement toggleBrand
+    _brandFacetList.toggle(brand);
+    _productSearcher.applyState((state) => state.copyWith(page: 0));
   }
 
   @override
   void toggleColor({required String color}) {
-    // TODO: implement toggleColor
+    _colorFacetList.toggle(color);
+    _productSearcher.applyState((state) => state.copyWith(page: 0));
   }
 
   @override
   void toggleSize({required String size}) {
-    // TODO: implement toggleSize
+    _sizeFacetList.toggle(size);
+    _productSearcher.applyState((state) => state.copyWith(page: 0));
+  }
+
+  @override
+  Stream<List<ProductModel>> get products =>
+      _productSearcher.responses.map((response) =>
+          response.hits.map(ProductModel.fromAlgoliaResponse).toList());
+
+  @override
+  void search({required String query}) {
+    _productSearcher.query(query);
   }
 }

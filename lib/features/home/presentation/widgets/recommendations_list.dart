@@ -1,10 +1,14 @@
+import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_circular_progress_indicator.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_divider.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/product_card.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/spacer_box.dart';
-import 'package:urban_aura_flutter/core/config/mock_data.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
-
+import 'package:urban_aura_flutter/features/products/presentation/bloc/products_bloc.dart';
 
 class RecommendationsList extends StatefulWidget {
   const RecommendationsList({super.key});
@@ -18,7 +22,6 @@ class _RecommendationsListState extends State<RecommendationsList> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Center(
@@ -32,95 +35,50 @@ class _RecommendationsListState extends State<RecommendationsList> {
         ),
         const CustomDivider(),
         const SpacerBox(),
-        CarouselSlider.builder(
-          itemCount: homePageProducts.length,
-          itemBuilder: (context, itemIndex, pageViewIndex) {
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    flex: 4,
-                    child: Image.network(
-                      homePageProducts[itemIndex].image,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  Expanded(
-                      flex: 1,
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              '${homePageProducts[itemIndex].productName} ${homePageProducts[itemIndex].description}',
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall
-                                      ?.fontSize,
-                                  color: AppPalette.body),
-                            ),
-                            Text(
-                              '\$${homePageProducts[itemIndex].price.toStringAsFixed(0)}',
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: AppPalette.primaryColor,
-                              ),
-                            )
-                          ],
-                        ),
-                      ))
-                ],
-              ),
-            );
+        BlocBuilder<ProductsBloc, ProductsState>(
+          builder: (context, state) {
+            if (state is ProductListLoadingState) {
+              return const SliverToBoxAdapter(
+                child: Center(child: CustomCircularProgressIndicator()),
+              );
+            }
+            if (state is ProductListLoadedState) {
+              ///This is done to avoid same hero tags and should be removed as soon as algolia recommendation is plugged in
+              //TODO plug algolia recommendation model
+              final products = state.products.skip(4).toList();
+              return CarouselSlider.builder(
+                itemCount: state.products.isEmpty ? 1 : min(4, products.length),
+                itemBuilder: (context, itemIndex, pageViewIndex) {
+                  return ProductCard(product: products[itemIndex]);
+                },
+                options: CarouselOptions(
+                    onPageChanged: (pageIndex, reason) {
+                      setState(() {
+                        activeItem = pageIndex;
+                      });
+                    },
+                    autoPlay: false,
+                    enableInfiniteScroll: false,
+                    enlargeCenterPage: false,
+                    viewportFraction: 0.6,
+                    initialPage: 0,
+                    aspectRatio: 1.0),
+              );
+            }
+
+            if (state is ProductListFailedState) {
+              return Center(
+                child: IconButton(
+                  onPressed: () => context.read<ProductsBloc>().add(
+                        const GetProductsEvent(),
+                      ),
+                  icon: const Icon(CupertinoIcons.refresh),
+                ),
+              );
+            }
+            return Container();
           },
-          options: CarouselOptions(
-              onPageChanged: (pageIndex, reason) {
-                setState(() {
-                  activeItem = pageIndex;
-                });
-              },
-              autoPlay: false,
-              height: 350,
-              enableInfiniteScroll: false,
-              enlargeCenterPage: false,
-              viewportFraction: 0.6,
-              initialPage: 0,
-              aspectRatio: 1.0),
         ),
-        const SizedBox(
-          height: 12,
-        ),
-        // Container(
-        //   constraints: BoxConstraints(
-        //     maxHeight: 8,
-        //     minHeight: 8,
-        //     maxWidth: size.width * 0.4,
-        //     minWidth: size.width * 0.4,
-        //   ),
-        //   child: Center(
-        //     child: ListView.separated(
-        //       shrinkWrap: true,
-        //       scrollDirection: Axis.horizontal,
-        //       itemCount: homePageProducts.length,
-        //       itemBuilder: (context, index) {
-        //         return DiamondIndicator(
-        //           isActive: index == activeItem,
-        //         );
-        //       },
-        //       separatorBuilder: (BuildContext context, int index) {
-        //         return const SizedBox(
-        //           width: 8,
-        //         );
-        //       },
-        //     ),
-        //   ),
-        // )
       ],
     );
   }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:urban_aura_flutter/features/products/domain/entity/product_entity.dart';
+import 'package:urban_aura_flutter/core/common/domain/entities/product_entity.dart';
 
 List<ProductModel> parseProductList(String str) => List<ProductModel>.from(
       json

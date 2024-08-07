@@ -79,3 +79,19 @@ final class AddToCartActionFailedState extends CartState {
     required this.message,
   });
 }
+
+final class RemoveFromCartActionSuccessState extends CartState {
+  final String message;
+
+  const RemoveFromCartActionSuccessState({
+    required this.message,
+  });
+}
+
+final class RemoveFromCartActionFailedState extends CartState {
+  final String message;
+
+  const RemoveFromCartActionFailedState({
+    required this.message,
+  });
+}

@@ -20,4 +20,6 @@ abstract interface class CartRemoteDatasource {
     required String size,
     required String color,
   });
+
+  Future<SuccessModel> removeFromCart({required String cartItemId});
 }

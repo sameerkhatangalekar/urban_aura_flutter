@@ -8,7 +8,7 @@ import 'package:urban_aura_flutter/core/common/presentation/widgets/footer.dart'
 import 'package:urban_aura_flutter/core/common/presentation/widgets/spacer_box.dart';
 import 'package:urban_aura_flutter/core/helper/color_provider.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
-import 'package:urban_aura_flutter/features/products/domain/entity/product_entity.dart';
+import 'package:urban_aura_flutter/core/common/domain/entities/product_entity.dart';
 import 'package:urban_aura_flutter/features/products/presentation/widgets/image_slider.dart';
 
 class ProductPage extends StatefulWidget {
@@ -72,7 +72,6 @@ class _ProductPageState extends State<ProductPage> {
       ),
       body: BlocListener<CartBloc, CartState>(
         listener: (context, state) {
-          ScaffoldMessenger.of(context).clearSnackBars();
           if (state is CartActionLoadingState) {
             LoadingDialog().show(
               context: context,
@@ -80,25 +79,30 @@ class _ProductPageState extends State<ProductPage> {
           }
           if (state is AddToCartActionSuccessState) {
             LoadingDialog().hide();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
           }
           if (state is AddToCartActionFailedState) {
             LoadingDialog().hide();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
           }
         },
         child: CustomScrollView(
           slivers: [
-            const CustomSliverAppBar(
+            CustomSliverAppBar(
               showBackButton: true,
+              refreshCallback: () => {},
             ),
             SliverPadding(
               sliver: SliverToBoxAdapter(
@@ -185,7 +189,7 @@ class _ProductPageState extends State<ProductPage> {
                                       decoration: BoxDecoration(
                                           color: hexToColor(colorMap[widget
                                               .productEntity.colors[index]
-                                              .toLowerCase()]!),
+                                              .toLowerCase()] ?? "#FFFFFF"),
                                           borderRadius:
                                               BorderRadius.circular(100)),
                                     ),
@@ -260,11 +264,11 @@ class _ProductPageState extends State<ProductPage> {
               ),
             ),
             //TODO FILL RELATIVE PRODUCT DATA
-           const SliverToBoxAdapter(
-             child:  SpacerBox(
-               height: 200,
-             ),
-           ),
+            const SliverToBoxAdapter(
+              child: SpacerBox(
+                height: 200,
+              ),
+            ),
             const SliverToBoxAdapter(
               child: Footer(),
             )

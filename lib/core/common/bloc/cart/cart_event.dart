@@ -29,6 +29,14 @@ final class DecrementItemCountAction extends CartEvent {
   });
 }
 
+final class RemoveFromCartActionEvent extends CartEvent {
+  final String cartItemId;
+
+  const RemoveFromCartActionEvent({
+    required this.cartItemId,
+  });
+}
+
 final class AddToCartAction extends CartEvent with EquatableMixin {
   final String productId;
   final int quantity;
@@ -43,6 +51,4 @@ final class AddToCartAction extends CartEvent with EquatableMixin {
 
   @override
   List<Object?> get props => [productId, quantity, color, size];
-
-
 }

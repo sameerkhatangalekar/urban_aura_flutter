@@ -7,9 +7,10 @@ import 'package:urban_aura_flutter/features/auth/presentation/pages/signup_page.
 import 'package:urban_aura_flutter/features/cart/presentation/pages/cart_page.dart';
 import 'package:urban_aura_flutter/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:urban_aura_flutter/features/home/presentation/pages/home_page.dart';
-import 'package:urban_aura_flutter/features/products/domain/entity/product_entity.dart';
+import 'package:urban_aura_flutter/core/common/domain/entities/product_entity.dart';
 import 'package:urban_aura_flutter/features/products/presentation/pages/product_page.dart';
 import 'package:urban_aura_flutter/features/products/presentation/pages/products_page.dart';
+import 'package:urban_aura_flutter/features/search/presentation/pages/search_page.dart';
 
 import '../common/bloc/app_user_cubit.dart';
 
@@ -75,6 +76,23 @@ abstract class AppRouter {
         pageBuilder: (context, state) {
           return CustomTransitionPage(
               child: const HomePage(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return CupertinoPageTransition(
+                  primaryRouteAnimation: animation,
+                  secondaryRouteAnimation: secondaryAnimation,
+                  linearTransition: true,
+                  child: child,
+                );
+              });
+        },
+      ),
+      GoRoute(
+        path: '/search',
+
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+              child: const SearchPage(),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
                 return CupertinoPageTransition(

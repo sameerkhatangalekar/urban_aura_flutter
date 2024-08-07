@@ -1,10 +1,10 @@
 import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
-import 'package:urban_aura_flutter/core/common/data/models/product_model.dart';
+import 'package:urban_aura_flutter/core/common/domain/entities/product_entity.dart';
 
-abstract interface class SearchDataSource {
-  Stream<List<ProductModel>> get products;
+abstract interface class SearchRepository {
+  Stream<List<ProductEntity>> get products;
 
-  Stream<int> get appliedFiltersCount;
+  Stream<int> get appliedFilterCount;
 
   Stream<List<SelectableFacet>> get brandFacet;
 

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:urban_aura_flutter/core/helper/custom_search_delegate.dart';
 
 class CustomSliverAppBar extends StatefulWidget {
   final bool showBackButton;
+  final VoidCallback refreshCallback;
 
-  const CustomSliverAppBar({super.key, this.showBackButton = false});
+  const CustomSliverAppBar(
+      {super.key, this.showBackButton = false, required this.refreshCallback});
 
   @override
   State<CustomSliverAppBar> createState() => _CustomSliverAppBarState();
@@ -14,7 +15,6 @@ class CustomSliverAppBar extends StatefulWidget {
 
 class _CustomSliverAppBarState extends State<CustomSliverAppBar> {
   final _searchController = TextEditingController();
-
   @override
   void dispose() {
     _searchController.dispose();
@@ -28,10 +28,8 @@ class _CustomSliverAppBarState extends State<CustomSliverAppBar> {
         stretch: true,
         // expandedHeight: 120,
         centerTitle: true,
-        leading: widget.showBackButton
-            ? IconButton(
-                onPressed: () => context.pop(), icon: const Icon(Icons.close))
-            : GestureDetector(
+        leading: widget.showBackButton ? IconButton(
+                onPressed: () => context.pop(), icon: const Icon(Icons.close)) : GestureDetector(
                 onTap: () {
                   Scaffold.of(context).openDrawer();
                 },
@@ -56,7 +54,7 @@ class _CustomSliverAppBarState extends State<CustomSliverAppBar> {
         actions: [
           GestureDetector(
             onTap: () {
-
+              context.push('/search');
             },
             child: SvgPicture.asset(
               'assets/icons/search_icon.svg',
@@ -83,6 +81,7 @@ class _CustomSliverAppBarState extends State<CustomSliverAppBar> {
         ],
         stretchTriggerOffset: 5,
         onStretchTrigger: () async {
+          widget.refreshCallback();
           debugPrint('called');
         });
   }
