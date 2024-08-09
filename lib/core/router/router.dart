@@ -11,8 +11,9 @@ import 'package:urban_aura_flutter/core/common/domain/entities/product_entity.da
 import 'package:urban_aura_flutter/features/products/presentation/pages/product_page.dart';
 import 'package:urban_aura_flutter/features/products/presentation/pages/products_page.dart';
 import 'package:urban_aura_flutter/features/search/presentation/pages/search_page.dart';
+import 'package:urban_aura_flutter/features/user/presentation/pages/user_page.dart';
 
-import '../common/bloc/app_user_cubit.dart';
+import '../common/bloc/auth/app_user_cubit.dart';
 
 abstract class AppRouter {
   static GoRouter router = GoRouter(
@@ -88,8 +89,23 @@ abstract class AppRouter {
         },
       ),
       GoRoute(
+        path: '/user',
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+              child: const UserPage(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return CupertinoPageTransition(
+                  primaryRouteAnimation: animation,
+                  secondaryRouteAnimation: secondaryAnimation,
+                  linearTransition: true,
+                  child: child,
+                );
+              });
+        },
+      ),
+      GoRoute(
         path: '/search',
-
         pageBuilder: (context, state) {
           return CustomTransitionPage(
               child: const SearchPage(),
@@ -113,7 +129,6 @@ abstract class AppRouter {
               builder: (context, state) => ProductPage(
                 productEntity: state.extra as ProductEntity,
               ),
-
             ),
           ]),
       GoRoute(
@@ -153,14 +168,18 @@ abstract class AppRouter {
   );
 
   static String? _guard(BuildContext context, GoRouterState state) {
-    if (state.matchedLocation == '/signup' && context.read<AppUserCubit>().state is AppUserLoggedOutState) {
+    if (state.matchedLocation == '/signup' &&
+        context.read<AppUserCubit>().state is AppUserLoggedOutState) {
       return null;
     }
 
     if (context.read<AppUserCubit>().state is AppUserLoggedOutState) {
       return '/signin';
     }
-    if ((context.read<AppUserCubit>().state is AppUserLoggedInState && state.matchedLocation == '/') || (context.read<AppUserCubit>().state is AppUserLoggedInState && state.matchedLocation == '/signin')) {
+    if ((context.read<AppUserCubit>().state is AppUserLoggedInState &&
+            state.matchedLocation == '/') ||
+        (context.read<AppUserCubit>().state is AppUserLoggedInState &&
+            state.matchedLocation == '/signin')) {
       return '/';
     }
     return null;

@@ -2,7 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:urban_aura_flutter/core/common/domain/entities/success_entity.dart';
 import 'package:urban_aura_flutter/core/error/exceptions.dart';
 import 'package:urban_aura_flutter/core/error/failure.dart';
-import 'package:urban_aura_flutter/core/common/data/datasources/cart_remote_datasource.dart';
+import 'package:urban_aura_flutter/core/common/data/datasources/cart/cart_remote_datasource.dart';
 
 import 'package:urban_aura_flutter/core/common/domain/entities/cart_entity.dart';
 

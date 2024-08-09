@@ -29,6 +29,8 @@ class FilterButton extends StatelessWidget {
             )),
           ),
           IconButton(
+            padding: EdgeInsets.zero,
+            alignment: Alignment.center,
             onPressed: () => searchPageKey.currentState?.openEndDrawer(),
             icon: const Icon(Icons.filter_list),
           ),

@@ -16,7 +16,6 @@ class _ColorSelectorState extends State<ColorSelector> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('colors rendered');
     return Row(children: [
       Text('Sizes : ',
           style: Theme.of(context)

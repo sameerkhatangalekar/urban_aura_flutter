@@ -1,15 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:urban_aura_flutter/core/common/bloc/app_user_cubit.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_divider.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_sliver_app_bar.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/footer.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/spacer_box.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
+import 'package:urban_aura_flutter/features/home/presentation/widgets/home_drawer.dart';
 import 'package:urban_aura_flutter/features/home/presentation/widgets/new_arrival_grid.dart';
 import 'package:urban_aura_flutter/features/home/presentation/widgets/recommendations_list.dart';
 import 'package:vector_graphics/vector_graphics.dart';
@@ -21,36 +20,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
-        drawer: Drawer(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-          backgroundColor: Colors.grey.shade200,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: ListTile(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  tileColor: Colors.white,
-                  trailing: const Icon(
-                    Icons.logout,
-                    color: Colors.black,
-                  ),
-                  title: const Text('Logout'),
-                  onTap: () {
-                    context.read<AppUserCubit>().logout();
-                  },
-                ),
-              )
-            ],
-          ),
-        ),
+        drawer: const HomeDrawer(),
         body: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
             CustomSliverAppBar(
-              refreshCallback: () => {},
+              refreshCallback: () {},
             ),
             SliverToBoxAdapter(
               child: InkWell(
@@ -425,3 +400,4 @@ class HomePage extends StatelessWidget {
         ));
   }
 }
+

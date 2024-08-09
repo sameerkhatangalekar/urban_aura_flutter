@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:urban_aura_flutter/core/common/bloc/app_user_cubit.dart';
+import 'package:urban_aura_flutter/core/common/bloc/auth/app_user_cubit.dart';
 import 'package:urban_aura_flutter/features/auth/domain/usecases/signin_usecase.dart';
 
 import '../../domain/usecases/signup_usecase.dart';

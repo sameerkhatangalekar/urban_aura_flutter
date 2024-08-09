@@ -26,7 +26,6 @@ class _CustomSliverAppBarState extends State<CustomSliverAppBar> {
     return SliverAppBar(
         floating: true,
         stretch: true,
-        // expandedHeight: 120,
         centerTitle: true,
         leading: widget.showBackButton ? IconButton(
                 onPressed: () => context.pop(), icon: const Icon(Icons.close)) : GestureDetector(
@@ -79,10 +78,10 @@ class _CustomSliverAppBarState extends State<CustomSliverAppBar> {
             width: 16,
           )
         ],
-        stretchTriggerOffset: 5,
+        stretchTriggerOffset: 100,
         onStretchTrigger: () async {
           widget.refreshCallback();
-          debugPrint('called');
+          debugPrint('Stretch triggered');
         });
   }
 }

@@ -108,10 +108,4 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
   }
 
-  @override
-  void onChange(Change<SearchState> change) {
-    debugPrint(
-        '${change.currentState.searchStatus} ----> ${change.nextState.searchStatus}');
-    super.onChange(change);
-  }
 }

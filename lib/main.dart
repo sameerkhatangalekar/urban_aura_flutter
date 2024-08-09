@@ -1,48 +1,42 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:urban_aura_flutter/core/common/bloc/app_user_cubit.dart';
+import 'package:urban_aura_flutter/core/common/bloc/auth/app_user_cubit.dart';
+import 'package:urban_aura_flutter/core/common/bloc/user/user_bloc.dart';
 import 'package:urban_aura_flutter/core/constants.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 import 'package:urban_aura_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:urban_aura_flutter/core/common/bloc/cart/cart_bloc.dart';
 import 'package:urban_aura_flutter/features/products/presentation/bloc/products_bloc.dart';
 import 'package:urban_aura_flutter/features/search/presentation/bloc/search_bloc.dart';
+
 import 'package:urban_aura_flutter/init_dependencies.main.dart';
 
 import 'core/router/router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Bloc.observer =  AppBlocObserver();
+  Bloc.observer = AppBlocObserver();
   await initDependencies();
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiBlocProvider(
-
       providers: [
         BlocProvider(
           create: (context) => serviceLocator<AppUserCubit>()..getCurrentUser(),
-          lazy: false,
         ),
         BlocProvider(
           create: (context) => serviceLocator<AuthBloc>(),
         ),
+        BlocProvider(create: (context) => serviceLocator<UserBloc>()),
         BlocProvider(
           create: (context) => serviceLocator<ProductsBloc>()
             ..add(
               const GetProductsEvent(),
             ),
         ),
-        BlocProvider(
-          create: (context) => serviceLocator<CartBloc>()
-            ..add(
-              const GetCartEvent(),
-            ),
-        ),
-        BlocProvider(
-          create: (context) => serviceLocator<SearchBloc>()
-        )
+        BlocProvider(create: (context) => serviceLocator<CartBloc>()),
+        BlocProvider(create: (context) => serviceLocator<SearchBloc>())
       ],
       child: BlocListener<AppUserCubit, AppUserState>(
         listener: (context, state) {
@@ -111,7 +105,7 @@ class AppBlocObserver extends BlocObserver {
     /// With this we can specifically know, when and what changed in our Bloc
     if (kDebugMode) {
       print(
-        "There was a transition from ${transition.currentState} to ${transition.nextState}");
+          "There was a transition from ${transition.currentState} to ${transition.nextState}");
     }
   }
 
@@ -121,7 +115,7 @@ class AppBlocObserver extends BlocObserver {
     super.onError(bloc, error, stackTrace);
     if (kDebugMode) {
       print(
-        "Error happened in $bloc with error $error and the stacktrace is $stackTrace");
+          "Error happened in $bloc with error $error and the stacktrace is $stackTrace");
     }
   }
 

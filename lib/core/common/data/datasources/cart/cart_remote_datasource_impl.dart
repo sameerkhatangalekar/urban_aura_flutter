@@ -3,7 +3,7 @@ import 'package:urban_aura_flutter/core/common/data/models/success_model.dart';
 import 'package:urban_aura_flutter/core/constants.dart';
 import 'package:urban_aura_flutter/core/error/exceptions.dart';
 import 'package:urban_aura_flutter/core/helper/error_processor.dart';
-import 'package:urban_aura_flutter/core/common/data/datasources/cart_remote_datasource.dart';
+import 'package:urban_aura_flutter/core/common/data/datasources/cart/cart_remote_datasource.dart';
 import 'package:urban_aura_flutter/core/common/data/models/cart_model.dart';
 
 class CartRemoteDatasourceImpl implements CartRemoteDatasource {

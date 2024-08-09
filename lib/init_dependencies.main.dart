@@ -2,16 +2,19 @@ import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:urban_aura_flutter/core/common/bloc/user/user_bloc.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/add_to_cart_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/get_addresses_usecase.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/remove_from_cart_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/update_address_usecase.dart';
 import 'package:urban_aura_flutter/features/auth/data/datasource/auth_remote_data_source_impl.dart';
 import 'package:urban_aura_flutter/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:urban_aura_flutter/features/auth/domain/repository/auth_repository.dart';
 import 'package:urban_aura_flutter/features/auth/domain/usecases/signin_usecase.dart';
 import 'package:urban_aura_flutter/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:urban_aura_flutter/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:urban_aura_flutter/core/common/data/datasources/cart_remote_datasource.dart';
-import 'package:urban_aura_flutter/core/common/data/datasources/cart_remote_datasource_impl.dart';
+import 'package:urban_aura_flutter/core/common/data/datasources/cart/cart_remote_datasource.dart';
+import 'package:urban_aura_flutter/core/common/data/datasources/cart/cart_remote_datasource_impl.dart';
 import 'package:urban_aura_flutter/core/common/data/repository/cart_repository_impl.dart';
 import 'package:urban_aura_flutter/core/common/domain/repository/cart_repository.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/decrement_cart_item_count_usecase.dart';
@@ -20,7 +23,7 @@ import 'package:urban_aura_flutter/core/common/bloc/cart/cart_bloc.dart';
 import 'package:urban_aura_flutter/features/products/domain/usecase/get_product_by_id_usecase.dart';
 import 'package:urban_aura_flutter/features/products/domain/usecase/get_products_usecase.dart';
 import 'package:urban_aura_flutter/features/products/presentation/bloc/products_bloc.dart';
-import 'package:urban_aura_flutter/core/common/bloc/app_user_cubit.dart';
+import 'package:urban_aura_flutter/core/common/bloc/auth/app_user_cubit.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/increment_cart_item_count_usecase.dart';
 import 'package:urban_aura_flutter/core/router/router.dart';
 import 'package:urban_aura_flutter/features/products/data/datasource/products_remote_data_source.dart';
@@ -32,6 +35,12 @@ import 'package:urban_aura_flutter/features/search/data/datasource/search_data_s
 import 'package:urban_aura_flutter/features/search/data/repository/search_repository_impl.dart';
 import 'package:urban_aura_flutter/features/search/domain/repository/search_repository.dart';
 import 'package:urban_aura_flutter/features/search/presentation/bloc/search_bloc.dart';
+import 'package:urban_aura_flutter/core/common/data/datasources/user/user_data_source.dart';
+import 'package:urban_aura_flutter/core/common/data/datasources/user/user_data_source_impl.dart';
+import 'package:urban_aura_flutter/core/common/data/repository/user_repository_impl.dart';
+import 'package:urban_aura_flutter/core/common/domain/repository/user_repository.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/create_address_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/delete_address_usecase.dart';
 
 import 'core/constants.dart';
 
@@ -40,6 +49,7 @@ final serviceLocator = GetIt.instance;
 Future<void> initDependencies() async {
   await initDioClient();
   initAuth();
+  initUserBloc();
   initSearchBloc();
   initProductsBloc();
   initCartBloc();
@@ -121,6 +131,48 @@ void initAuth() {
           signupUsecase: serviceLocator(),
           storage: serviceLocator(),
           appUserCubit: serviceLocator()),
+    );
+}
+
+void initUserBloc() {
+  serviceLocator
+    ..registerLazySingleton<UserDataSource>(
+      () => UserDataSourceImpl(
+        dio: serviceLocator(instanceName: 'globalDio'),
+      ),
+    )
+    ..registerLazySingleton<UserRepository>(
+      () => UserRepositoryImpl(
+        userDataSource: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<GetAddressesUsecase>(
+      () => GetAddressesUsecase(
+        userRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<CreateAddressUsecase>(
+      () => CreateAddressUsecase(
+        userRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<UpdateAddressUsecase>(
+      () => UpdateAddressUsecase(
+        userRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<DeleteAddressUsecase>(
+      () => DeleteAddressUsecase(
+        userRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<UserBloc>(
+      () => UserBloc(
+        updateAddressUsecase: serviceLocator(),
+        createAddressUsecase: serviceLocator(),
+        deleteAddressUsecase: serviceLocator(),
+        getAddressesUsecase: serviceLocator(),
+      ),
     );
 }
 

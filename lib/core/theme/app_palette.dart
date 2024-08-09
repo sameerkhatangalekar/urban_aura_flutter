@@ -38,6 +38,10 @@ sealed class AppThemeData {
       backgroundColor: Colors.white,
       centerTitle: true,
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: AppPalette.titleActive,
+
+    ),
     searchBarTheme: const SearchBarThemeData(
       textStyle: WidgetStatePropertyAll(TextStyle(color: Colors.black))
     ),

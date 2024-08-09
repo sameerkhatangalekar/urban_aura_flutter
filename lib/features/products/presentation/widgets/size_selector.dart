@@ -16,7 +16,7 @@ class _SizeSelectorState extends State<SizeSelector> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('sizes rendered');
+
     return Row(
       children: [
         Text('Sizes : ',

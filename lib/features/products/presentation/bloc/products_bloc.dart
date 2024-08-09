@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:urban_aura_flutter/core/extensions.dart';
 import 'package:urban_aura_flutter/core/usecase.dart';
 import 'package:urban_aura_flutter/core/common/domain/entities/product_entity.dart';
 import 'package:urban_aura_flutter/features/products/domain/usecase/get_product_by_id_usecase.dart';

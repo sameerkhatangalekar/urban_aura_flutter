@@ -6,7 +6,6 @@ import 'package:urban_aura_flutter/core/common/domain/usecase/add_to_cart_usecas
 import 'package:urban_aura_flutter/core/common/domain/usecase/get_cart_usecase.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/increment_cart_item_count_usecase.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/remove_from_cart_usecase.dart';
-import 'package:urban_aura_flutter/core/extensions.dart';
 import 'package:urban_aura_flutter/core/usecase.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/decrement_cart_item_count_usecase.dart';
 
@@ -38,6 +37,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         _addToCartUsecase = addToCartUsecase,
         super(const CartInitial()) {
     on<GetCartEvent>((event, emit) async {
+      emit(const CartLoadingState());
       final result = await _getCartUsecase(const NoParams());
 
       result.fold(
@@ -141,9 +141,4 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     );
   }
 
-  @override
-  void onChange(Change<CartState> change) {
-    change.log();
-    super.onChange(change);
-  }
 }

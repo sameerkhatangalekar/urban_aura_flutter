@@ -1,71 +1,39 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:urban_aura_flutter/core/common/bloc/user/user_bloc.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_circular_progress_indicator.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_divider.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/spacer_box.dart';
+import 'package:urban_aura_flutter/core/theme/app_palette.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/address_card.dart';
+import 'package:urban_aura_flutter/features/user/presentation/widgets/custom_black_button.dart';
 
-
-import '../../../../core/config/mock_data.dart';
-import '../../../../core/theme/app_palette.dart';
-
-class CheckoutPage extends StatelessWidget {
+class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
 
   @override
+  State<CheckoutPage> createState() => _CheckoutPageState();
+}
+
+class _CheckoutPageState extends State<CheckoutPage> {
+  int selectedAddressIndex = -1;
+
+  @override
+  void initState() {
+    context.read<UserBloc>().add(
+      const GetAddressesEvent(),
+    );
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: SizedBox(
-        height: size.height * 0.12,
-        width: size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'TOTAL',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Text(
-                    '\$240',
-                    style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.titleMedium?.fontSize,
-                        color: AppPalette.secondaryColor),
-                  )
-                ],
-              ),
-            ),
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.all(4),
-              color: AppPalette.titleActive,
-              child: Center(
-                child: TextButton.icon(
-                  onPressed: () {
-                    _showSuccessDialog(context: context);
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/icons/shopping_bag_icon.svg',
-                    theme: const SvgTheme(
-                      currentColor: Colors.white,
-                    ),
-                  ),
-                  label: const Text(
-                    'PLACE ORDER',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
+      bottomSheet: CustomBlackButton(
+        label: 'PLACE ORDER',
+        voidCallback: () => _showSuccessDialog(context: context),
       ),
       body: CustomScrollView(
         slivers: [
@@ -90,57 +58,57 @@ class CheckoutPage extends StatelessWidget {
               ),
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            sliver: SliverList.separated(
-                itemCount: mockAddresses.length,
-                itemBuilder: (context, index) {
-                  final address = mockAddresses[index];
-                  return Container(
-                    decoration: const BoxDecoration(color: Colors.white54),
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          address.name,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          address.addressLineOne,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(color: AppPalette.label),
-                        ),
-                        Text(
-                          address.addressLineTwo,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(color: AppPalette.label),
-                        ),
-                        Text(
-                          address.contact,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(color: AppPalette.label),
-                        ),
-                      ],
-                    ),
+          BlocBuilder<UserBloc, UserState>(builder: (context, state) {
+            if (state is UserAddressLoadingState) {
+              return const SliverToBoxAdapter(
+                child: Center(child: CustomCircularProgressIndicator()),
+              );
+            }
+
+            if (state is UserAddressLoadedState) {
+              if (state.addresses.isEmpty) {
+                return const SliverToBoxAdapter(
+                    child: Center(child: Text('No addresses added')));
+              }
+              return SliverList.separated(
+                itemCount: state.addresses.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final address = state.addresses[index];
+                  return InkWell(
+                      splashFactory: NoSplash.splashFactory,
+                      onTap: () {
+                        setState(() {
+                          selectedAddressIndex = index;
+                        });
+                      },
+                      child: AddressCard(
+                        addressEntity: address,
+                        isSelected: index == selectedAddressIndex,
+                      ));
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(
+                    height: 4,
                   );
                 },
-                separatorBuilder: (context, miniIndex) {
-                  return const SizedBox(
-                    height: 8,
-                  );
-                }),
-          )
+              );
+            }
+
+            if (state is UserAddressFailedState) {
+              return SliverToBoxAdapter(
+                child: Center(
+                  child: IconButton(
+                    onPressed: () => context.read<UserBloc>().add(
+                          const GetAddressesEvent(),
+                        ),
+                    icon: const Icon(CupertinoIcons.refresh),
+                  ),
+                ),
+              );
+            }
+
+            return const SliverToBoxAdapter();
+          })
         ],
       ),
     );
@@ -193,8 +161,7 @@ class CheckoutPage extends StatelessWidget {
                   const SpacerBox(),
                   TextButton(
                     onPressed: () {
-
-                    context.go('/');
+                      context.go('/');
                     },
                     style: const ButtonStyle(
                         shape: WidgetStatePropertyAll(RoundedRectangleBorder(
@@ -215,3 +182,4 @@ class CheckoutPage extends StatelessWidget {
     );
   }
 }
+

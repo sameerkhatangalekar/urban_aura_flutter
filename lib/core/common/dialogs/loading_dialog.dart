@@ -43,8 +43,6 @@ class LoadingDialog {
     } else if (renderObj is RenderSliverList) {
       size = Size(renderObj.constraints.crossAxisExtent,
           renderObj.constraints.viewportMainAxisExtent);
-      debugPrint('Im using sliver constraints');
-
     } else {
       size = const Size(400, 600);
     }

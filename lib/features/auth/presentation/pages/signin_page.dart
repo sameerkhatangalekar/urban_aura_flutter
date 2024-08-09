@@ -38,148 +38,146 @@ class _SignInPageState extends State<SignInPage> {
         body: BlocListener<AuthBloc, AuthState>(
           child: Center(
             child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Form(
                 key: formState,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icons/logo.svg',
-                        theme: const SvgTheme(
-                          currentColor: Colors.white,
-                        ),
-                        height: 78,
-                      )
-                          .animate()
-                          .fadeIn(
-                          duration: const Duration(milliseconds: 800),
-                          curve: Curves.easeIn)
-                          .then()
-                          .shimmer(
-                        duration: const Duration(milliseconds: 800),
-                        colors: [
-                          Colors.white,
-                          AppPalette.secondaryColor,
-                          Colors.white
-                        ],
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/logo.svg',
+                      theme: const SvgTheme(
+                        currentColor: Colors.white,
                       ),
-                      const SpacerBox(
-                        height: 52,
+                      height: 78,
+                    )
+                        .animate()
+                        .fadeIn(
+                            duration: const Duration(milliseconds: 800),
+                            curve: Curves.easeIn)
+                        .then()
+                        .shimmer(
+                      duration: const Duration(milliseconds: 800),
+                      colors: [
+                        Colors.white,
+                        AppPalette.secondaryColor,
+                        Colors.white
+                      ],
+                    ),
+                    const SpacerBox(
+                      height: 52,
+                    ),
+                    TextFormField(
+                      controller: _emailController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: const InputDecoration(
+                        hintText: 'Email',
+                        labelText: 'Email',
                       ),
-                      TextFormField(
-                        controller: _emailController,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
-                          hintText: 'Email',
-                          labelText: 'Email',
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Email cannot be empty';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SpacerBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        controller: _passwordController,
-                        obscureText: isObscured,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          labelText: 'Password',
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(
-                                    () {
-                                  isObscured = !isObscured;
-                                },
-                              );
-                            },
-                            icon: Icon(isObscured
-                                ? CupertinoIcons.eye_slash
-                                : CupertinoIcons.eye),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Password cannot be empty';
-                          }
-                          if (value.length < 4) {
-                            return 'Password must contain 4 or more characters';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SpacerBox(
-                        height: 52,
-                      ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: size.width * 0.5,
-                          maxWidth: size.width * 0.5,
-                        ),
-                        child: TextButton.icon(
-                          style: ButtonStyle(
-                            overlayColor:
-                            WidgetStatePropertyAll<Color>(Colors.grey.shade500),
-                            iconColor: const WidgetStatePropertyAll<Color>(
-                              Colors.black,
-                            ),
-                            backgroundColor: const WidgetStatePropertyAll<Color>(
-                              Colors.white,
-                            ),
-                            shape: const WidgetStatePropertyAll(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                              ),
-                            ),
-                            splashFactory: InkSparkle.splashFactory,
-                          ),
-                          onPressed: () async {
-                            if (formState.currentState!.validate()) {
-                              context.read<AuthBloc>().add(
-                                SigninEvent(
-                                  email: _emailController.text.trim(),
-                                  password: _passwordController.text.trim(),
-                                ),
-                              );
-                            }
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email cannot be empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SpacerBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: isObscured,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                        labelText: 'Password',
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(
+                              () {
+                                isObscured = !isObscured;
+                              },
+                            );
                           },
-                          iconAlignment: IconAlignment.end,
-                          icon: const Icon(
-                            Icons.key_sharp,
-                          ),
-                          label: const Text(
-                            'SIGN IN',
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
+                          icon: Icon(isObscured
+                              ? CupertinoIcons.eye_slash
+                              : CupertinoIcons.eye),
                         ),
                       ),
-                      TextButton(
-                        style: const ButtonStyle(
-                            splashFactory: NoSplash.splashFactory),
-                        onPressed: () {
-                          context.push(
-                            '/signup',
-                          );
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Password cannot be empty';
+                        }
+                        if (value.length < 4) {
+                          return 'Password must contain 4 or more characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SpacerBox(
+                      height: 52,
+                    ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * 0.5,
+                        maxWidth: size.width * 0.5,
+                      ),
+                      child: TextButton.icon(
+                        style: ButtonStyle(
+                          overlayColor: WidgetStatePropertyAll<Color>(
+                              Colors.grey.shade500),
+                          iconColor: const WidgetStatePropertyAll<Color>(
+                            Colors.black,
+                          ),
+                          backgroundColor: const WidgetStatePropertyAll<Color>(
+                            Colors.white,
+                          ),
+                          shape: const WidgetStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
+                          ),
+                          splashFactory: InkSparkle.splashFactory,
+                        ),
+                        onPressed: () async {
+                          if (formState.currentState!.validate()) {
+                            context.read<AuthBloc>().add(
+                                  SigninEvent(
+                                    email: _emailController.text.trim(),
+                                    password: _passwordController.text.trim(),
+                                  ),
+                                );
+                          }
                         },
                         iconAlignment: IconAlignment.end,
-                        child: const Text(
-                          'New user? Sign up',
+                        icon: const Icon(
+                          Icons.key_sharp,
+                        ),
+                        label: const Text(
+                          'SIGN IN',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    TextButton(
+                      style: const ButtonStyle(
+                          splashFactory: NoSplash.splashFactory),
+                      onPressed: () {
+                        context.push(
+                          '/signup',
+                        );
+                      },
+                      iconAlignment: IconAlignment.end,
+                      child: const Text(
+                        'New user? Sign up',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

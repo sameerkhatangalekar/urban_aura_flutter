@@ -55,6 +55,7 @@ class _SearchPageState extends State<SearchPage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            backgroundColor: Colors.white,
             floating: true,
             leadingWidth: 28,
             leading: IconButton(
@@ -62,36 +63,40 @@ class _SearchPageState extends State<SearchPage> {
                 icon: const Icon(Icons.arrow_back)),
             title: SearchBar(
               backgroundColor:
-                  WidgetStatePropertyAll<Color>(Colors.grey.shade100),
-              hintText: 'Search...',
+                  const WidgetStatePropertyAll<Color>(Colors.white),
+              hintText: 'Search for brands & products',
               controller: _searchController,
               onChanged: (query) => context
                   .read<SearchBloc>()
                   .add(SearchActionEvent(query: query)),
-              trailing: [
-                IconButton(
-                    onPressed: () {
-                      _searchController.clear();
-                      context
-                          .read<SearchBloc>()
-                          .add(const SearchActionEvent(query: ''));
-                    },
-                    icon: const Icon(Icons.close))
-              ],
               hintStyle: WidgetStatePropertyAll(
                 Theme.of(context)
                     .textTheme
                     .titleSmall
-                    ?.copyWith(color: Colors.grey),
+                    ?.copyWith(color: Colors.grey.shade700),
               ),
               constraints: const BoxConstraints(minHeight: 36, minWidth: 36),
               elevation: const WidgetStatePropertyAll(0),
               shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4))),
             ),
-            actions: const [
-              FilterButton(),
-              SizedBox(
+            actions: [
+              IconButton(
+                padding: EdgeInsets.zero,
+                alignment: Alignment.center,
+                onPressed: () {
+                  _searchController.clear();
+                  context.read<SearchBloc>().add(
+                        const SearchActionEvent(query: ''),
+                      );
+                },
+                icon: Icon(
+                  Icons.search_off,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+              const FilterButton(),
+              const SizedBox(
                 width: 4,
               )
             ],

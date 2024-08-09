@@ -102,7 +102,7 @@ class _ProductPageState extends State<ProductPage> {
           slivers: [
             CustomSliverAppBar(
               showBackButton: true,
-              refreshCallback: () => {},
+              refreshCallback: () {},
             ),
             SliverPadding(
               sliver: SliverToBoxAdapter(
@@ -141,7 +141,7 @@ class _ProductPageState extends State<ProductPage> {
                       height: 4,
                     ),
                     Text(
-                      '\$${widget.productEntity.price.toStringAsFixed(0)}',
+                      '\$${widget.productEntity.price}',
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge

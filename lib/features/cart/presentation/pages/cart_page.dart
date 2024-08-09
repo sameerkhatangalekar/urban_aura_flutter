@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urban_aura_flutter/core/common/bloc/cart/cart_state.dart';
 import 'package:urban_aura_flutter/core/common/dialogs/loading_dialog.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_circular_progress_indicator.dart';
-import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_divider.dart';
-import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 import 'package:urban_aura_flutter/core/common/bloc/cart/cart_bloc.dart';
-import 'package:urban_aura_flutter/features/cart/presentation/widgets/cart_item.dart';
+import 'package:urban_aura_flutter/features/cart/presentation/widgets/cart_summery_sheet.dart';
+import 'package:urban_aura_flutter/features/cart/presentation/widgets/cart_item_card.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -18,185 +16,60 @@ class CartPage extends StatelessWidget {
     context.read<CartBloc>().add(
           const GetCartEvent(),
         );
-    final size = MediaQuery.sizeOf(context);
     return Scaffold(
-      bottomNavigationBar: BlocBuilder<CartBloc, CartState>(
-        builder: (BuildContext context, CartState state) {
-          if (state is CartSuccessState) {
-            return SizedBox(
-              height: size.height * 0.25,
-              width: size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const CustomDivider(),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'SUB TOTAL',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        Text(
-                          '\$${state.cartEntity.cartTotal.toStringAsFixed(2)}',
-                          style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.fontSize,
-                              color: AppPalette.secondaryColor),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Text(
-                      '*shipping charges, taxes and discount codes are calculated at the time of accounting',
-                      maxLines: 2,
-                      style: TextStyle(color: AppPalette.placeHolder),
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    color: AppPalette.titleActive,
-                    child: Center(
-                      child: TextButton.icon(
-                        onPressed: () {
-                          context.push('/checkout');
-                        },
-                        icon: SvgPicture.asset(
-                          'assets/icons/shopping_bag_icon.svg',
-                          theme: const SvgTheme(
-                            currentColor: Colors.white,
-                          ),
-                        ),
-                        label: const Text(
-                          'BUY NOW',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            );
-          }
-
-          return SizedBox(
-            height: size.height * 0.25,
-            width: size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const CustomDivider(),
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'SUB TOTAL',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      Text(
-                        '\$--',
-                        style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.fontSize,
-                            color: AppPalette.secondaryColor),
-                      )
-                    ],
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    '*shipping charges, taxes and discount codes are calculated at the time of accounting',
-                    maxLines: 2,
-                    style: TextStyle(color: AppPalette.placeHolder),
-                  ),
-                ),
-                const Spacer(),
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  color: AppPalette.titleActive,
-                  child: Center(
-                    child: TextButton.icon(
-                      onPressed: () {
-                        context.push('/checkout');
-                      },
-                      icon: SvgPicture.asset(
-                        'assets/icons/shopping_bag_icon.svg',
-                        theme: const SvgTheme(
-                          currentColor: Colors.white,
-                        ),
-                      ),
-                      label: const Text(
-                        'BUY NOW',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
-        },
-      ),
+      extendBody: false,
+     
+      bottomNavigationBar:  const CartSummarySheet(),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             floating: true,
             stretch: true,
-            centerTitle: true,
             leading: IconButton(
-                onPressed: () => context.pop(), icon: const Icon(Icons.close)),
+              onPressed: () => context.pop(),
+              icon: const Icon(Icons.close),
+            ),
             title: const Text(
               'CART',
               style: TextStyle(letterSpacing: 4),
             ),
-              stretchTriggerOffset: 5,
-              onStretchTrigger: () async {
-                context.read<CartBloc>().add(
-                  const GetCartEvent(),
-                );
-              }
+            stretchTriggerOffset: 100,
+            onStretchTrigger: () async {
+              context.read<CartBloc>().add(
+                    const GetCartEvent(),
+                  );
+            },
           ),
           BlocConsumer<CartBloc, CartState>(
             builder: (context, state) {
               if (state is CartLoadingState) {
-                return const CustomCircularProgressIndicator();
+                return const SliverToBoxAdapter(
+                  child: Center(child: CustomCircularProgressIndicator()),
+                );
               }
               if (state is CartSuccessState) {
-                return SliverList.separated(
-                    itemCount: state.cartEntity.cart.isEmpty
-                        ? 1
-                        : state.cartEntity.cart.length,
-                    itemBuilder: (context, index) {
-                      if (state.cartEntity.cart.isEmpty) {
-                        return const Center(
-                          child: Text('Cart is empty'),
-                        );
-                      }
+                if (state.cartEntity.cart.isEmpty) {
+                  return const SliverToBoxAdapter(
+                    child: Center(
+                      child: Text('Cart is empty'),
+                    ),
+                  );
+                }
 
-                      return CartItemCard(
-                        cartItem: state.cartEntity.cart[index],
-                      );
-                    },
-                    separatorBuilder: (context, miniIndex) {
-                      return const SizedBox(
-                        height: 4,
-                      );
-                    });
+                return SliverList.separated(
+                  itemCount: state.cartEntity.cart.length,
+                  itemBuilder: (context, index) {
+                    return CartItemCard(
+                      cartItem: state.cartEntity.cart[index],
+                    );
+                  },
+                  separatorBuilder: (context, miniIndex) {
+                    return const SizedBox(
+                      height: 4,
+                    );
+                  },
+                );
               }
               if (state is CartFailedState) {
                 return const SliverToBoxAdapter(
@@ -287,3 +160,4 @@ class CartPage extends StatelessWidget {
     );
   }
 }
+
