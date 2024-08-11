@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:urban_aura_flutter/core/common/bloc/auth/app_user_cubit.dart';
 import 'package:urban_aura_flutter/core/common/bloc/user/user_bloc.dart';
 import 'package:urban_aura_flutter/core/constants.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 import 'package:urban_aura_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:urban_aura_flutter/core/common/bloc/cart/cart_bloc.dart';
+import 'package:urban_aura_flutter/features/checkout/presentation/bloc/checkout_bloc.dart';
+import 'package:urban_aura_flutter/features/orders/presentation/bloc/order_bloc.dart';
 import 'package:urban_aura_flutter/features/products/presentation/bloc/products_bloc.dart';
 import 'package:urban_aura_flutter/features/search/presentation/bloc/search_bloc.dart';
 
@@ -16,6 +19,7 @@ import 'core/router/router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = stripePublishableKey;
   Bloc.observer = AppBlocObserver();
   await initDependencies();
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -28,15 +32,30 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => serviceLocator<AuthBloc>(),
         ),
-        BlocProvider(create: (context) => serviceLocator<UserBloc>()),
+        BlocProvider(
+          create: (context) => serviceLocator<UserBloc>(),
+        ),
         BlocProvider(
           create: (context) => serviceLocator<ProductsBloc>()
             ..add(
               const GetProductsEvent(),
             ),
         ),
-        BlocProvider(create: (context) => serviceLocator<CartBloc>()),
-        BlocProvider(create: (context) => serviceLocator<SearchBloc>())
+        BlocProvider(
+          create: (context) => serviceLocator<CartBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<SearchBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<CheckoutBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<CheckoutBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<OrderBloc>(),
+        )
       ],
       child: BlocListener<AppUserCubit, AppUserState>(
         listener: (context, state) {

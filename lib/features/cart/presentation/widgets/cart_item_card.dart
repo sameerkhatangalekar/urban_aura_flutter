@@ -31,22 +31,25 @@ class _CartItemCardState extends State<CartItemCard> {
       alignment: Alignment.bottomRight,
       children: [
         Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8),
-            constraints: BoxConstraints(
-              maxHeight: size.height * 0.2,
-              minHeight: size.height * 0.2,
-            ),
+            margin: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4), color: AppPalette.inputBg),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  flex: 1,
-                  child: CachedNetworkImage(
-                    imageUrl: widget.cartItem.product.images.first,
-                    fit: BoxFit.contain,
-                    placeholder: (context, _) => Container(
-                      color: getRandomColor(),
+                Container(
+                  width: size.width * 0.24,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(4)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.cartItem.product.images.first,
+                      fit: BoxFit.contain,
+                      placeholder: (context, _) => Container(
+                        color: getRandomColor(),
+                      ),
                     ),
                   ),
                 ),

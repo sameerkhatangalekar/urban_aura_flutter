@@ -21,7 +21,9 @@ class HomePage extends StatelessWidget {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
         drawer: const HomeDrawer(),
+        extendBodyBehindAppBar: true,
         body: CustomScrollView(
+        primary: true ,
           physics: const BouncingScrollPhysics(),
           slivers: [
             CustomSliverAppBar(

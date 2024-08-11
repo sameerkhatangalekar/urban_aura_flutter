@@ -8,6 +8,8 @@ import 'package:urban_aura_flutter/features/cart/presentation/pages/cart_page.da
 import 'package:urban_aura_flutter/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:urban_aura_flutter/features/home/presentation/pages/home_page.dart';
 import 'package:urban_aura_flutter/core/common/domain/entities/product_entity.dart';
+import 'package:urban_aura_flutter/features/orders/presentation/pages/order_page.dart';
+import 'package:urban_aura_flutter/features/orders/presentation/pages/orders_page.dart';
 import 'package:urban_aura_flutter/features/products/presentation/pages/product_page.dart';
 import 'package:urban_aura_flutter/features/products/presentation/pages/products_page.dart';
 import 'package:urban_aura_flutter/features/search/presentation/pages/search_page.dart';
@@ -146,6 +148,31 @@ abstract class AppRouter {
                 );
               });
         },
+      ),
+      GoRoute(
+        path: '/orders',
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+              child: const OrdersPage(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return CupertinoPageTransition(
+                  primaryRouteAnimation: animation,
+                  secondaryRouteAnimation: secondaryAnimation,
+                  linearTransition: true,
+                  child: child,
+                );
+              });
+        },
+        routes: [
+          GoRoute(
+            path: ':orderId',
+            builder: (context, state) => OrderPage(
+              orderId: state.extra as String,
+            ),
+          ),
+
+        ]
       ),
       GoRoute(
         path: '/checkout',

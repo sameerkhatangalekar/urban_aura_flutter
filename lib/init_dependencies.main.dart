@@ -1,6 +1,7 @@
 import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get_it/get_it.dart';
 import 'package:urban_aura_flutter/core/common/bloc/user/user_bloc.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/add_to_cart_usecase.dart';
@@ -20,6 +21,22 @@ import 'package:urban_aura_flutter/core/common/domain/repository/cart_repository
 import 'package:urban_aura_flutter/core/common/domain/usecase/decrement_cart_item_count_usecase.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/get_cart_usecase.dart';
 import 'package:urban_aura_flutter/core/common/bloc/cart/cart_bloc.dart';
+import 'package:urban_aura_flutter/features/checkout/data/datasources/checkout_data_source.dart';
+import 'package:urban_aura_flutter/features/checkout/data/datasources/checkout_data_source_impl.dart';
+import 'package:urban_aura_flutter/features/checkout/data/repository/checkout_repository_impl.dart';
+import 'package:urban_aura_flutter/features/checkout/domain/repository/checkout_repository.dart';
+import 'package:urban_aura_flutter/features/checkout/domain/usecases/initiate_payment_usecase.dart';
+import 'package:urban_aura_flutter/features/checkout/domain/usecases/request_checkout_usecase.dart';
+import 'package:urban_aura_flutter/features/checkout/domain/usecases/show_payment_usecase.dart';
+import 'package:urban_aura_flutter/features/checkout/presentation/bloc/checkout_bloc.dart';
+import 'package:urban_aura_flutter/features/orders/data/datasource/order_data_source.dart';
+import 'package:urban_aura_flutter/features/orders/data/datasource/order_data_source_impl.dart';
+import 'package:urban_aura_flutter/features/orders/data/repository/order_repository_impl.dart';
+import 'package:urban_aura_flutter/features/orders/domain/repository/order_repository.dart';
+import 'package:urban_aura_flutter/features/orders/domain/usecases/cancel_order_by_id_usecase.dart';
+import 'package:urban_aura_flutter/features/orders/domain/usecases/get_order_by_id_usecase.dart';
+import 'package:urban_aura_flutter/features/orders/domain/usecases/get_orders_by_user_usecase.dart';
+import 'package:urban_aura_flutter/features/orders/presentation/bloc/order_bloc.dart';
 import 'package:urban_aura_flutter/features/products/domain/usecase/get_product_by_id_usecase.dart';
 import 'package:urban_aura_flutter/features/products/domain/usecase/get_products_usecase.dart';
 import 'package:urban_aura_flutter/features/products/presentation/bloc/products_bloc.dart';
@@ -53,6 +70,8 @@ Future<void> initDependencies() async {
   initSearchBloc();
   initProductsBloc();
   initCartBloc();
+  initCheckoutBloc();
+  initOrdersBloc();
 }
 
 Future<void> initDioClient() async {
@@ -281,5 +300,77 @@ void initCartBloc() {
         decrementCartItemCountUsecase: serviceLocator(),
         addToCartUsecase: serviceLocator(),
       ),
+    );
+}
+
+void initCheckoutBloc() {
+  serviceLocator
+    ..registerLazySingleton<Stripe>(() => Stripe.instance)
+    ..registerLazySingleton<CheckoutDataSource>(
+      () => CheckoutDataSourceImpl(
+        dio: serviceLocator(instanceName: 'globalDio'),
+        stripe: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<CheckoutRepository>(
+      () => CheckoutRepositoryImpl(
+        checkoutDatasource: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<RequestCheckoutUsecase>(
+      () => RequestCheckoutUsecase(
+        checkoutRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<InitiatePaymentUsecase>(
+      () => InitiatePaymentUsecase(
+        checkoutRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<ShowPaymentSheetUsecase>(
+      () => ShowPaymentSheetUsecase(
+        checkoutRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<CheckoutBloc>(
+      () => CheckoutBloc(
+          requestCheckoutUsecase: serviceLocator(),
+          initiatePaymentUsecase: serviceLocator(),
+          showPaymentSheetUsecase: serviceLocator()),
+    );
+}
+
+void initOrdersBloc() {
+  serviceLocator
+    ..registerLazySingleton<OrderDataSource>(
+      () => OrderDataSourceImpl(
+        dio: serviceLocator(instanceName: 'globalDio'),
+      ),
+    )
+    ..registerLazySingleton<OrderRepository>(
+      () => OrderRepositoryImpl(
+        orderDataSource: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<GetOrdersByUserUsecase>(
+      () => GetOrdersByUserUsecase(
+        orderRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<CancelOrderByIdUsecase>(
+      () => CancelOrderByIdUsecase(
+        orderRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<GetOrderByIdUsecase>(
+      () => GetOrderByIdUsecase(
+        orderRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<OrderBloc>(
+      () => OrderBloc(
+          getOrderByIdUsecase: serviceLocator(),
+          cancelOrderByIdUsecase: serviceLocator(),
+          getOrdersByUserUsecase: serviceLocator()),
     );
 }

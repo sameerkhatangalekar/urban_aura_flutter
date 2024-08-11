@@ -40,7 +40,27 @@ class HomeDrawer extends StatelessWidget {
                 style: TextStyle(color: Colors.black),
               ),
               onTap: () {
-              context.push('/user');
+                context.push('/user');
+              },
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            ListTile(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              tileColor: Colors.grey.shade100,
+              trailing: const Icon(
+                Icons.account_circle_sharp,
+                color: Colors.black,
+              ),
+              title: const Text(
+                'My Orders',
+                style: TextStyle(color: Colors.black),
+              ),
+              onTap: () {
+                Scaffold.of(context).closeDrawer();
+                context.push('/orders');
               },
             ),
             const Spacer(),
