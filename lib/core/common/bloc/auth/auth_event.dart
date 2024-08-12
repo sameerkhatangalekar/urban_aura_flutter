@@ -4,11 +4,14 @@ sealed class AuthEvent extends Equatable {
   const AuthEvent();
 }
 
-final class AuthStatusRequestedEvent extends AuthEvent {
-  const AuthStatusRequestedEvent();
+
+final class _AppUserChanged extends AuthEvent {
+  const _AppUserChanged(this.isAuthenticated);
+
+  final bool isAuthenticated;
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [isAuthenticated];
 }
 
 final class SigninEvent extends AuthEvent {
@@ -40,12 +43,9 @@ final class GoogleSigninEvent extends AuthEvent {
   List<Object?> get props => [];
 }
 
-
 final class SignOutEvent extends AuthEvent {
-  final String message;
+  const SignOutEvent();
 
-  const SignOutEvent({ this.message = ''});
   @override
   List<Object?> get props => [];
-
 }

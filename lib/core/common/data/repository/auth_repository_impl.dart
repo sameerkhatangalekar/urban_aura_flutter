@@ -55,6 +55,9 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  @override
+  Stream<bool> get userState => _authRemoteDataSource.userState;
+
   // @override
   // Future<Either<Failure, String>> signUpWithGoogle() async {
   //   try {

@@ -45,12 +45,12 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         ),
         (r) {
           emit(CheckoutRequestSuccessState(clientSecret: r.clientSecret));
-          add(InitiatePaymentSheetEvent(clientSecret: r.clientSecret));
+          add(InitiatePaymentSheetEvent(clientSecret: r.clientSecret,publishableKey: r.publishableKey));
         },
       );
     });
     on<InitiatePaymentSheetEvent>((event, emit) async {
-      final result = await _initiatePaymentUsecase(event.clientSecret);
+      final result = await _initiatePaymentUsecase(TransactionKeysParams(clientSecret: event.clientSecret, publishableKey: event.publishableKey));
       result.fold(
         (l) => emit(
           InitiatePaymentSheetFailedState(message: l.message),

@@ -17,7 +17,7 @@ abstract interface class CheckoutRepository {
   });
 
   Future<Either<Failure, PaymentSheetPaymentOption?>> initPaymentSheet(
-      {required String clientSecret});
+      {required String clientSecret,required String publishableKey});
 
   Future<Either<Failure, PaymentSheetPaymentOption?>> showPaymentSheet();
 

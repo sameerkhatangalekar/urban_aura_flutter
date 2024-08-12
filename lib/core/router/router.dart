@@ -187,8 +187,7 @@ abstract class AppRouter {
   );
 
   static String? _guard(BuildContext context, GoRouterState state) {
-    if (state.matchedLocation == '/signup' &&
-        context.read<AuthBloc>().state is SignedOutState) {
+    if (state.matchedLocation == '/signup' && context.read<AuthBloc>().state is SignedOutState) {
       return null;
     }
 

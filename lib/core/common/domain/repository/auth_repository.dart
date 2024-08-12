@@ -13,4 +13,6 @@ abstract interface class AuthRepository {
   // Future<Either<Failure, String>> signUpWithGoogle();
 
   Future<Either<Failure, void>> signOut();
+
+  Stream<bool> get userState;
 }

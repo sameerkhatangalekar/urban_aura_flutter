@@ -82,10 +82,12 @@ class OrderInfoCard extends StatelessWidget {
                         if (!await launchUrl(
                           Uri.parse(_order.refund!.receipt!),
                         )) {
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(const SnackBar(
-                                content: Text("Couldn't open link")));
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(const SnackBar(
+                                  content: Text("Couldn't open link")));
+                          }
                         }
                       },
                       child: Row(

@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:urban_aura_flutter/core/constants.dart';
 import 'package:urban_aura_flutter/core/error/exceptions.dart';
@@ -12,15 +11,11 @@ part 'auth_remote_data_source.dart';
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio _dio;
-  final FlutterSecureStorage _storage;
   final FirebaseAuth _firebaseAuth;
 
   const AuthRemoteDataSourceImpl(
-      {required Dio dio,
-      required FlutterSecureStorage storage,
-      required FirebaseAuth firebaseAuth})
+      {required Dio dio, required FirebaseAuth firebaseAuth})
       : _dio = dio,
-        _storage = storage,
         _firebaseAuth = firebaseAuth;
 
   @override
@@ -159,7 +154,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final List<String> scopes = ['email', 'profile'];
       final GoogleSignInAccount? googleSignInAccount =
-          await GoogleSignIn(scopes:scopes ).signIn();
+          await GoogleSignIn(scopes: scopes).signIn();
 
       if (googleSignInAccount == null) {
         throw const ServerException('Signin aborted');
@@ -181,6 +176,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         throw const ServerException('Unable to process request at this time');
       }
       user.log();
+
       ///register the information to the server
       await _dio.post(signUpWithGoogleUrl, data: {
         "email": user.email,
@@ -211,16 +207,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
     } on DioException catch (e) {
       await _firebaseAuth.signOut();
-      throw  ServerException(dioErrorProcessor(e));
-    }  catch (e) {
+      throw ServerException(dioErrorProcessor(e));
+    } catch (e) {
       await _firebaseAuth.signOut();
-      throw  const ServerException('Unknown error occurred');
+      throw const ServerException('Unknown error occurred');
     }
   }
 
   @override
   Future<void> signOut() async {
-    await _storage.deleteAll();
     final user = _firebaseAuth.currentUser;
     try {
       if (user != null) {
@@ -232,5 +227,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on FirebaseAuthException catch (_) {
       throw const ServerException('Unknown Firebase error');
     }
+  }
+
+  @override
+  Stream<bool> get userState {
+    return _firebaseAuth.authStateChanges().map((firebaseUser) {
+      final isAuthenticated = firebaseUser == null ? false : true;
+      return isAuthenticated;
+    });
   }
 }

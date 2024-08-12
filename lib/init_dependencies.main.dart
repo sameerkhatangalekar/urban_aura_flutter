@@ -1,8 +1,6 @@
 import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get_it/get_it.dart';
 import 'package:urban_aura_flutter/core/common/bloc/user/user_bloc.dart';
@@ -17,7 +15,6 @@ import 'package:urban_aura_flutter/core/common/data/repository/auth_repository_i
 import 'package:urban_aura_flutter/core/common/domain/repository/auth_repository.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/auth/signin_usecase.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/auth/signin_with_google_usecase.dart';
-
 import 'package:urban_aura_flutter/core/common/bloc/auth/auth_bloc.dart';
 import 'package:urban_aura_flutter/core/common/data/datasources/cart/cart_remote_datasource.dart';
 import 'package:urban_aura_flutter/core/common/data/datasources/cart/cart_remote_datasource_impl.dart';
@@ -26,6 +23,7 @@ import 'package:urban_aura_flutter/core/common/domain/repository/cart_repository
 import 'package:urban_aura_flutter/core/common/domain/usecase/cart/decrement_cart_item_count_usecase.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/cart/get_cart_usecase.dart';
 import 'package:urban_aura_flutter/core/common/bloc/cart/cart_bloc.dart';
+import 'package:urban_aura_flutter/core/extensions.dart';
 import 'package:urban_aura_flutter/features/checkout/data/datasources/checkout_data_source.dart';
 import 'package:urban_aura_flutter/features/checkout/data/datasources/checkout_data_source_impl.dart';
 import 'package:urban_aura_flutter/features/checkout/data/repository/checkout_repository_impl.dart';
@@ -79,35 +77,31 @@ Future<void> initDependencies() async {
 
 Future<void> initDioClient() async {
   final Dio dio = Dio();
-  serviceLocator.registerLazySingleton<FlutterSecureStorage>(
-    () => const FlutterSecureStorage(),
-  );
-
   List<Interceptor> interceptors = [];
   interceptors.add(
     InterceptorsWrapper(
       onRequest: (options, handler) async {
-        final user = FirebaseAuth.instance.currentUser;
-        print('Received user $user');
-        final authHeader = await serviceLocator<FlutterSecureStorage>().read(
-          key: 'jwtToken',
-        );
-
         if (options.path.contains('auth')) {
           return handler.next(options);
         }
-        options.headers['Authorization'] = 'Bearer $authHeader';
-        options.contentType = Headers.jsonContentType;
+        final user = FirebaseAuth.instance.currentUser;
+        if(user !=null)
+          {
+            'User is available'.log();
+            final token  = await user.getIdToken();
+            options.headers['Authorization'] = 'Bearer $token';
+            options.contentType = Headers.jsonContentType;
+          }else {
+          'User not available'.log();
+        }
+
         return handler.next(options);
       },
       onError: (error, handler) async {
         if (error.response?.statusCode == 401) {
-          if (error.requestOptions.path.contains('signup') ||
-              error.requestOptions.path.contains('signin')) {
+          if (error.requestOptions.path.contains('signup') || error.requestOptions.path.contains('signin')) {
             return handler.reject(error);
           }
-          await serviceLocator<FlutterSecureStorage>().deleteAll();
-          serviceLocator<AuthBloc>().add(const SignOutEvent());
         }
         return handler.reject(error);
       },
@@ -127,7 +121,6 @@ void initAuth() {
       () => AuthRemoteDataSourceImpl(
         firebaseAuth: serviceLocator(),
         dio: serviceLocator(instanceName: 'globalDio'),
-        storage: serviceLocator(),
       ),
     )
     ..registerLazySingleton<AuthRepository>(
@@ -159,9 +152,8 @@ void initAuth() {
       () => AuthBloc(
         signinUsecase: serviceLocator(),
         signupUsecase: serviceLocator(),
-        storage: serviceLocator(),
+        authRepository: serviceLocator(),
         signinWithGoogleUsecase: serviceLocator(),
-        firebaseAuth: serviceLocator(),
         signOutUsecase: serviceLocator(),
       ),
     );

@@ -1,5 +1,4 @@
 // ignore_for_file: non_constant_identifier_names
-
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:urban_aura_flutter/core/error/exceptions.dart';
@@ -41,10 +40,10 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
 
   @override
   Future<Either<Failure, PaymentSheetPaymentOption?>> initPaymentSheet(
-      {required String clientSecret}) async {
+      {required String clientSecret,required String publishableKey}) async {
     try {
       final result = await _checkoutDataSource.initPaymentSheet(
-          clientSecret: clientSecret);
+          clientSecret: clientSecret,publishableKey: publishableKey);
       return right(result);
     } on ServerException catch (e) {
       return left(Failure(e.message));

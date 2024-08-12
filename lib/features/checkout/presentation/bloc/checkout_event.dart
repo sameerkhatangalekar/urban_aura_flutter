@@ -28,8 +28,8 @@ final class CheckoutRequestedActionEvent extends CheckoutEvent {
 
 final class InitiatePaymentSheetEvent extends CheckoutEvent {
   final String clientSecret;
-
-  const InitiatePaymentSheetEvent({required this.clientSecret});
+  final String publishableKey;
+  const InitiatePaymentSheetEvent({required this.clientSecret,required this.publishableKey});
 }
 
 final class ShowPaymentSheetEvent extends CheckoutEvent {

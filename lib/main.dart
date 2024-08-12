@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,6 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  Stripe.publishableKey = stripePublishableKey;
   Bloc.observer = AppBlocObserver();
 
   'Initiating firebase '.log();
@@ -33,7 +31,7 @@ Future<void> main() async {
       providers: [
         BlocProvider(
           create: (context) =>
-              serviceLocator<AuthBloc>()..add(const AuthStatusRequestedEvent()),
+              serviceLocator<AuthBloc>(),
         ),
         BlocProvider(
           create: (context) => serviceLocator<UserBloc>(),
@@ -62,23 +60,6 @@ Future<void> main() async {
       ],
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is SignedOutState) {
-            scaffoldMessengerKey.currentState?.showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Logged out successfully',
-                  maxLines: 3,
-                  textAlign: TextAlign.justify,
-                  style: TextStyle(overflow: TextOverflow.ellipsis),
-                ),
-                margin: EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 8,
-                ),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          }
           AppRouter.router.refresh();
         },
         child: MaterialApp.router(

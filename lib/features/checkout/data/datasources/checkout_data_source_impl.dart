@@ -44,8 +44,9 @@ final class CheckoutDataSourceImpl implements CheckoutDataSource {
 
   @override
   Future<PaymentSheetPaymentOption?> initPaymentSheet(
-      {required String clientSecret}) async {
+      {required String clientSecret,required String publishableKey}) async {
     try {
+      Stripe.publishableKey = publishableKey;
       final result = await _stripe.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: clientSecret,

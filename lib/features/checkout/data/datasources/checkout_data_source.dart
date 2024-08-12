@@ -14,7 +14,7 @@ abstract interface class CheckoutDataSource {
     required String postal_code,
   });
 
-  Future<PaymentSheetPaymentOption?> initPaymentSheet({required String clientSecret});
+  Future<PaymentSheetPaymentOption?> initPaymentSheet({required String clientSecret,required String publishableKey});
 
   Future<PaymentSheetPaymentOption?> showPaymentSheet();
 

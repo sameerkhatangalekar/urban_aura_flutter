@@ -1,8 +1,8 @@
+import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:urban_aura_flutter/core/common/domain/repository/auth_repository.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/auth/signout_usecase.dart';
 import 'package:urban_aura_flutter/core/common/domain/usecase/auth/signup_usecase.dart';
 import 'package:urban_aura_flutter/core/usecase.dart';
@@ -14,56 +14,44 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final FirebaseAuth _firebaseAuth;
+  final AuthRepository _authRepository;
   final SigninUsecase _signinUsecase;
   final SignupUsecase _signupUsecase;
   final SigninWithGoogleUsecase _signinWithGoogleUsecase;
   final SignOutUsecase _signOutUsecase;
-  final FlutterSecureStorage _storage;
+  late final StreamSubscription<bool> _userSubscription;
 
   AuthBloc({
-    required FirebaseAuth firebaseAuth,
+    required AuthRepository authRepository,
     required SigninUsecase signinUsecase,
     required SignupUsecase signupUsecase,
     required SigninWithGoogleUsecase signinWithGoogleUsecase,
     required SignOutUsecase signOutUsecase,
-     required FlutterSecureStorage storage,
   })  : _signinUsecase = signinUsecase,
+        _authRepository = authRepository,
         _signinWithGoogleUsecase = signinWithGoogleUsecase,
         _signupUsecase = signupUsecase,
         _signOutUsecase = signOutUsecase,
-        _firebaseAuth = firebaseAuth,
-        _storage = storage,
         super(const AuthInitial()) {
-
     on<AuthEvent>((event, emit) {
-      if (event is! AuthStatusRequestedEvent) {
+      if (event is! _AppUserChanged) {
         emit(const LoadingState());
       }
     });
-    on<AuthStatusRequestedEvent>((event, emit) async {
-      final user = _firebaseAuth.currentUser;
-      final token = await _storage.containsKey(key: 'jwtToken');
-      if (!token && user == null) {
-        emit(const AuthInitial());
-      } else {
+    on<_AppUserChanged>((event, emit) {
+      if (event.isAuthenticated) {
         emit(const SigninSuccessfulState());
+      } else {
+        emit(const SignedOutState());
       }
-
     });
     on<SigninEvent>((event, emit) async {
       final result = await _signinUsecase(
         SignInParams(email: event.email, password: event.password),
       );
-      await result.fold(
-        (l)   async => emit(SigninFailedState(message: l.message)),
-        (r) async {
-
-          emit(const SigninSuccessfulState());
-          await _storage.write(key: 'jwtToken', value: r).whenComplete(() {
-            emit(const SigninSuccessfulState());
-          });
-        },
+      result.fold(
+        (l) => emit(SigninFailedState(message: l.message)),
+        (r) {},
       );
     });
     on<SignupEvent>((event, emit) async {
@@ -71,24 +59,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         SignUpParams(
             email: event.email, name: event.name, password: event.password),
       );
-      await result.fold(
-        (l) async => emit(SignupFailedState(message: l.message)),
-        (r) async {
-
-          await _storage.write(key: 'jwtToken', value: r);
-          emit(const SigninSuccessfulState());
-        },
+      result.fold(
+        (l) => emit(SignupFailedState(message: l.message)),
+        (r) {},
       );
     });
     on<GoogleSigninEvent>((event, emit) async {
       final result = await _signinWithGoogleUsecase(const NoParams());
-      await result.fold(
-        (l) async => emit(SigninFailedState(message: l.message)),
-        (r) async {
-          await _storage.write(key: 'jwtToken', value: r).whenComplete(() {
-            emit(const SigninSuccessfulState());
-          });
-        },
+      result.fold(
+        (l) => emit(SigninFailedState(message: l.message)),
+        (r) {},
       );
     });
     on<SignOutEvent>((event, emit) async {
@@ -96,9 +76,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       result.fold(
         (l) => emit(SignOutFailedState(message: l.message)),
         (r) {
-           emit(const SignedOutState());
         },
       );
     });
+    _userSubscription = _authRepository.userState.listen(
+      (user) => add(_AppUserChanged(user)),
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _userSubscription.cancel();
+    return super.close();
   }
 }

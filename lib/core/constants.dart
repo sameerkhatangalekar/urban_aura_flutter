@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 final GlobalKey<ScaffoldState> searchPageKey = GlobalKey<ScaffoldState>();
-const String stripePublishableKey = 'pk_test_51ObfGPSFnT4ApGmzxg9pukvNH0PmeAaMxauptm6HCGE5UP3x7M8UAEkIqt2dmeWiTu3beVl8qCjJsKvoz2NpfBQU00slPP1uQh';
-
-const ip = 'http://192.168.1.2:3000';
+const ip = 'https://urban-aura-backend.onrender.com';
 const String baseUrl = ip;
 const String signInUrl = '$ip/auth/signin';
 const String signUpUrl = '$ip/auth/signup';
