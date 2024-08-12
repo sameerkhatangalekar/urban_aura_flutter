@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_divider.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 import 'package:urban_aura_flutter/features/orders/domain/entity/order_entity.dart';
 import 'package:urban_aura_flutter/features/orders/presentation/bloc/order_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrderInfoCard extends StatelessWidget {
   final OrderEntity _order;
@@ -33,11 +35,11 @@ class OrderInfoCard extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: 'Order id : ',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(),
                 children: [
                   TextSpan(
-                    text: _order.id,
-                    style: Theme.of(context).textTheme.titleSmall,
+                    text: _order.orderId,
+                    style: Theme.of(context).textTheme.titleMedium,
                   )
                 ],
               ),
@@ -45,23 +47,80 @@ class OrderInfoCard extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: 'Status : ',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(),
                 children: [
                   TextSpan(
                     text: _order.status.name.toUpperCase(),
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   )
                 ],
               ),
             ),
+            if (_order.refund != null)
+              RichText(
+                text: TextSpan(
+                  text: 'Refund status : ',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(),
+                  children: [
+                    TextSpan(
+                      text: _order.refund!.status.toUpperCase(),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    )
+                  ],
+                ),
+              ),
+            if (_order.refund != null)
+              RichText(
+                text: TextSpan(
+                  text: 'Receipt : ',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(),
+                  children: [
+                    WidgetSpan(
+                        child: InkWell(
+                      splashFactory: InkRipple.splashFactory,
+                      onTap: () async {
+                        if (!await launchUrl(
+                          Uri.parse(_order.refund!.receipt!),
+                        )) {
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(const SnackBar(
+                                content: Text("Couldn't open link")));
+                        }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Link',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(color: Colors.blue),
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          const FaIcon(
+                            FontAwesomeIcons.link,
+                            color: Colors.grey,
+                            size: 12,
+                          )
+                        ],
+                      ),
+                    )),
+                  ],
+                ),
+              ),
             RichText(
               text: TextSpan(
                 text: 'Total Amount : ',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(),
                 children: [
                   TextSpan(
                     text: '\$${_order.totalAmount}',
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   )
                 ],
               ),
@@ -69,11 +128,11 @@ class OrderInfoCard extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: 'Placed at : ',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(),
                 children: [
                   TextSpan(
                     text: _order.createdAt.toLocal().toString(),
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   )
                 ],
               ),
@@ -81,11 +140,11 @@ class OrderInfoCard extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: 'Last updated : ',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(),
                 children: [
                   TextSpan(
                     text: _order.updatedAt.toLocal().toString(),
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   )
                 ],
               ),
@@ -127,7 +186,7 @@ class OrderInfoCard extends StatelessWidget {
                   'No',
                   style: Theme.of(context)
                       .textTheme
-                      .titleSmall
+                      .titleMedium
                       ?.copyWith(letterSpacing: 2),
                 ),
               ),
@@ -146,7 +205,7 @@ class OrderInfoCard extends StatelessWidget {
                   'Yes',
                   style: Theme.of(context)
                       .textTheme
-                      .titleSmall
+                      .titleMedium
                       ?.copyWith(letterSpacing: 2, color: Colors.red),
                 ),
               )

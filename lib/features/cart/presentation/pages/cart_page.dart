@@ -18,8 +18,7 @@ class CartPage extends StatelessWidget {
         );
     return Scaffold(
       extendBody: false,
-     
-      bottomNavigationBar:  const CartSummarySheet(),
+      bottomNavigationBar: const CartSummarySheet(),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -50,11 +49,31 @@ class CartPage extends StatelessWidget {
               }
               if (state is CartSuccessState) {
                 if (state.cartEntity.cart.isEmpty) {
-                  return const SliverToBoxAdapter(
-                    child: Center(
-                      child: Text('Cart is empty'),
-                    ),
-                  );
+                  return SliverToBoxAdapter(
+                      child: Column(
+                    children: [
+                      const Center(
+                        child: Text('Cart is empty'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          context.pop();
+                        },
+                        style: const ButtonStyle(
+                            shape: WidgetStatePropertyAll(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.zero,
+                                    side: BorderSide(color: Colors.black26)))),
+                        child: Text(
+                          'START SHOPPING',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(letterSpacing: 2),
+                        ),
+                      )
+                    ],
+                  ));
                 }
 
                 return SliverList.separated(
@@ -94,7 +113,9 @@ class CartPage extends StatelessWidget {
             },
             listener: (context, state) {
               if (state is CartFailedState) {
-                ScaffoldMessenger.of(context).showSnackBar(
+                ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
                   SnackBar(
                     content: Text(state.message),
                   ),
@@ -160,4 +181,3 @@ class CartPage extends StatelessWidget {
     );
   }
 }
-

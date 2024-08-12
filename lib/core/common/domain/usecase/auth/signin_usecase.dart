@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:urban_aura_flutter/core/error/failure.dart';
 import 'package:urban_aura_flutter/core/usecase.dart';
-import '../repository/auth_repository.dart';
+import '../../repository/auth_repository.dart';
 
 final class SigninUsecase implements UseCase<String, SignInParams> {
   final AuthRepository _authRepository;

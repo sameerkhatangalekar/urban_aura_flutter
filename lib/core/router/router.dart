@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:urban_aura_flutter/core/common/bloc/auth/auth_bloc.dart';
 import 'package:urban_aura_flutter/features/auth/presentation/pages/signin_page.dart';
 import 'package:urban_aura_flutter/features/auth/presentation/pages/signup_page.dart';
 import 'package:urban_aura_flutter/features/cart/presentation/pages/cart_page.dart';
@@ -15,8 +16,6 @@ import 'package:urban_aura_flutter/features/products/presentation/pages/products
 import 'package:urban_aura_flutter/features/search/presentation/pages/search_page.dart';
 import 'package:urban_aura_flutter/features/user/presentation/pages/user_page.dart';
 
-import '../common/bloc/auth/app_user_cubit.dart';
-
 abstract class AppRouter {
   static GoRouter router = GoRouter(
     initialLocation: '/signin',
@@ -26,22 +25,6 @@ abstract class AppRouter {
       );
     },
     routes: [
-      // GoRoute(
-      //   path: '/signin',
-      //   builder: (context, state) {
-      //     return SignInScreen(
-      //       providers: [
-      //         GoogleProvider(clientId: '1037376833956-s8rg39e7of58d6bj6lid4fhaaimrde0k.apps.googleusercontent.com')
-      //       ],
-      //       actions: [
-      //         AuthStateChangeAction<SignedIn>((context, state) {
-      //           Navigator.pushReplacementNamed(context, '/profile');
-      //         }),
-      //       ],
-      //     );
-      //   },
-      // ),
-
       GoRoute(
         path: '/signin',
         pageBuilder: (context, state) {
@@ -150,30 +133,39 @@ abstract class AppRouter {
         },
       ),
       GoRoute(
-        path: '/orders',
-        pageBuilder: (context, state) {
-          return CustomTransitionPage(
-              child: const OrdersPage(),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                return CupertinoPageTransition(
-                  primaryRouteAnimation: animation,
-                  secondaryRouteAnimation: secondaryAnimation,
-                  linearTransition: true,
-                  child: child,
-                );
-              });
-        },
-        routes: [
-          GoRoute(
-            path: ':orderId',
-            builder: (context, state) => OrderPage(
-              orderId: state.extra as String,
-            ),
-          ),
-
-        ]
-      ),
+          path: '/orders',
+          pageBuilder: (context, state) {
+            return CustomTransitionPage(
+                child: const OrdersPage(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return CupertinoPageTransition(
+                    primaryRouteAnimation: animation,
+                    secondaryRouteAnimation: secondaryAnimation,
+                    linearTransition: true,
+                    child: child,
+                  );
+                });
+          },
+          routes: [
+            GoRoute(
+                path: ':orderId',
+                pageBuilder: (context, state) {
+                  return CustomTransitionPage(
+                      child: OrderPage(
+                        orderId: state.extra as String,
+                      ),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return CupertinoPageTransition(
+                          primaryRouteAnimation: animation,
+                          secondaryRouteAnimation: secondaryAnimation,
+                          linearTransition: true,
+                          child: child,
+                        );
+                      });
+                }),
+          ]),
       GoRoute(
         path: '/checkout',
         pageBuilder: (context, state) {
@@ -196,16 +188,16 @@ abstract class AppRouter {
 
   static String? _guard(BuildContext context, GoRouterState state) {
     if (state.matchedLocation == '/signup' &&
-        context.read<AppUserCubit>().state is AppUserLoggedOutState) {
+        context.read<AuthBloc>().state is SignedOutState) {
       return null;
     }
 
-    if (context.read<AppUserCubit>().state is AppUserLoggedOutState) {
+    if (context.read<AuthBloc>().state is SignedOutState) {
       return '/signin';
     }
-    if ((context.read<AppUserCubit>().state is AppUserLoggedInState &&
+    if ((context.read<AuthBloc>().state is SigninSuccessfulState &&
             state.matchedLocation == '/') ||
-        (context.read<AppUserCubit>().state is AppUserLoggedInState &&
+        (context.read<AuthBloc>().state is SigninSuccessfulState &&
             state.matchedLocation == '/signin')) {
       return '/';
     }

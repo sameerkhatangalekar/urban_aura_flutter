@@ -2,6 +2,8 @@ class OrderEntity {
   final List<OrderItemEntity> orderItems;
   final ShippingEntity shipping;
   final String id;
+  final String orderId;
+  final RefundEntity? refund;
   final Status status;
   final double totalAmount;
   final String paymentId;
@@ -12,7 +14,9 @@ class OrderEntity {
   OrderEntity({
     required this.orderItems,
     required this.shipping,
+    this.refund,
     required this.id,
+    required this.orderId,
     required this.status,
     required this.totalAmount,
     required this.paymentId,
@@ -20,6 +24,13 @@ class OrderEntity {
     required this.createdAt,
     required this.updatedAt,
   });
+}
+
+class RefundEntity {
+  final String status;
+  final String? receipt;
+
+  RefundEntity({required this.status, required this.receipt});
 }
 
 class OrderItemEntity {

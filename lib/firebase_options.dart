@@ -47,28 +47,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCDOGwboW34eSyaQ0kEFe0XBaqVdIUyOyE',
-    appId: '1:1037376833956:web:5a582cdd9df4aaab831931',
-    messagingSenderId: '1037376833956',
-    projectId: 'urban-aura-4cd33',
-    authDomain: 'urban-aura-4cd33.firebaseapp.com',
-    storageBucket: 'urban-aura-4cd33.appspot.com',
+    apiKey: 'AIzaSyCveuQf-AR0wWYWVBIMbZCiANmuUDJJnJw',
+    appId: '1:447651406966:web:d81bcc9d1b3d45035ceb57',
+    messagingSenderId: '447651406966',
+    projectId: 'urban-aura-209c9',
+    authDomain: 'urban-aura-209c9.firebaseapp.com',
+    storageBucket: 'urban-aura-209c9.appspot.com',
+    measurementId: 'G-3CQBZLZTRJ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyByOqIHVIbm5rYM75NqazO7Tv81NWO6V6o',
-    appId: '1:1037376833956:android:a051b84c30f8a6cf831931',
-    messagingSenderId: '1037376833956',
-    projectId: 'urban-aura-4cd33',
-    storageBucket: 'urban-aura-4cd33.appspot.com',
+    apiKey: 'AIzaSyByR1y-hmIsbrwhTn6Wd0P-TAHIil9gmtE',
+    appId: '1:447651406966:android:70cfdfad068cbcd15ceb57',
+    messagingSenderId: '447651406966',
+    projectId: 'urban-aura-209c9',
+    storageBucket: 'urban-aura-209c9.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBACYs3uc71kzCPupPZgN8PuIYzTIfupas',
-    appId: '1:1037376833956:ios:534aec5daa060688831931',
-    messagingSenderId: '1037376833956',
-    projectId: 'urban-aura-4cd33',
-    storageBucket: 'urban-aura-4cd33.appspot.com',
+    apiKey: 'AIzaSyDbL45eo8fxterJd-Z0p2QiBBofNE8BX9U',
+    appId: '1:447651406966:ios:04e2ee7e37a936225ceb57',
+    messagingSenderId: '447651406966',
+    projectId: 'urban-aura-209c9',
+    storageBucket: 'urban-aura-209c9.appspot.com',
     iosBundleId: 'com.sameer.urbanAuraFlutter',
   );
 }

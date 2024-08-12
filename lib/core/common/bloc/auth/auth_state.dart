@@ -18,14 +18,6 @@ final class LoadingState extends AuthState {
   List<Object> get props => [];
 }
 
-
-final class SignupSuccessfulState extends AuthState {
-  const SignupSuccessfulState();
-
-  @override
-  List<Object> get props => [];
-}
-
 final class SignupFailedState extends AuthState {
   final String message;
   const SignupFailedState({required this.message});
@@ -51,7 +43,18 @@ final class SigninFailedState extends AuthState {
   List<Object> get props => [message];
 }
 
+final class SignOutFailedState extends AuthState {
+  final String message;
+  const SignOutFailedState({required this.message});
 
+  @override
+  List<Object> get props => [message];
+}
 
+final class SignedOutState extends AuthState {
+  const SignedOutState();
 
+  @override
+  List<Object> get props => [];
+}
 

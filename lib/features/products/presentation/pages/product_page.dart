@@ -6,7 +6,6 @@ import 'package:urban_aura_flutter/core/common/dialogs/loading_dialog.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_sliver_app_bar.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/footer.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/spacer_box.dart';
-import 'package:urban_aura_flutter/core/helper/color_provider.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
 import 'package:urban_aura_flutter/core/common/domain/entities/product_entity.dart';
 import 'package:urban_aura_flutter/features/products/presentation/widgets/image_slider.dart';
@@ -26,48 +25,55 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
     return Scaffold(
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(4),
-        color: AppPalette.titleActive,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TextButton.icon(
-              onPressed: () {
-                if (selectedSizeIndex < 0) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please select size'),
-                    ),
-                  );
-                  return;
-                }
-                if (selectedColorIndex < 0) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please select color'),
-                    ),
-                  );
-                  return;
-                }
 
-                context.read<CartBloc>().add(
-                      AddToCartAction(
-                        productId: widget.productEntity.id,
-                        color: widget.productEntity.colors[selectedColorIndex],
-                        size: widget.productEntity.sizes[selectedSizeIndex],
-                      ),
-                    );
-              },
-              icon: const Icon(Icons.add, color: Colors.white),
-              label: const Text(
-                'ADD TO BASKET',
-                style: TextStyle(color: Colors.white),
+      bottomNavigationBar: ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: size.width,
+          maxWidth: size.width,
+          minHeight: 48,
+          maxHeight: 48
+        ),
+        child: TextButton.icon(
+          style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all(AppPalette.titleActive),
+              padding: WidgetStateProperty.all( EdgeInsets.zero),
+            splashFactory: InkRipple.splashFactory,
+            shape: WidgetStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+            overlayColor: WidgetStateProperty.all(Colors.white10)
+          ),
+          onPressed: () {
+            if (selectedSizeIndex < 0) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Please select size'),
+                ),
+              );
+              return;
+            }
+            if (selectedColorIndex < 0) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Please select color'),
+                ),
+              );
+              return;
+            }
+
+            context.read<CartBloc>().add(
+              AddToCartAction(
+                productId: widget.productEntity.id,
+                color: widget.productEntity.colors[selectedColorIndex],
+                size: widget.productEntity.sizes[selectedSizeIndex],
               ),
-            ),
-          ],
+            );
+          },
+          icon: const Icon(Icons.add, color: Colors.white),
+          label: const Text(
+            'ADD TO BASKET',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ),
       body: BlocListener<CartBloc, CartState>(
@@ -150,56 +156,68 @@ class _ProductPageState extends State<ProductPage> {
                     const SizedBox(
                       height: 16,
                     ),
+                    SizedBox(
+                      width: size.width,
+                      height: 32,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('Colors : ',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                  color: AppPalette.label, wordSpacing: 2)),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Expanded(
+                            child: ListView.separated(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: widget.productEntity.colors.length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    splashFactory: NoSplash.splashFactory,
+                                    onTap: () {
+                                      setState(() {
+                                        selectedColorIndex = index;
+                                      });
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: selectedColorIndex == index
+                                            ? AppPalette.secondaryColor
+                                            : Colors.white,
+                                          border: Border.all(color: AppPalette.placeHolder, width: 0.5),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                                      child: Text(
+                                        widget.productEntity.colors[index],
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: selectedColorIndex == index
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      )
+                                    ),
+                                  );
+
+                                }, separatorBuilder: (BuildContext context, int index) {
+                                  return const SizedBox(width: 4,);
+                            },),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
                     Row(
                       children: [
-                        Text('Colors : ',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                    color: AppPalette.label, wordSpacing: 2)),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        SizedBox(
-                          height: 22,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: widget.productEntity.colors.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      selectedColorIndex = index;
-                                    });
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(right: 8),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: AppPalette.placeHolder,
-                                            width: 0.5),
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    padding: const EdgeInsets.all(2),
-                                    child: Container(
-                                      height: 16,
-                                      width: 16,
-                                      decoration: BoxDecoration(
-                                          color: hexToColor(colorMap[widget
-                                              .productEntity.colors[index]
-                                              .toLowerCase()] ?? "#FFFFFF"),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                    ),
-                                  ),
-                                );
-                              }),
-                        ),
-                        const SizedBox(
-                          width: 24,
-                        ),
                         Text('Sizes : ',
                             style: Theme.of(context)
                                 .textTheme

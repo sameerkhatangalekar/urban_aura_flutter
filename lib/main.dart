@@ -1,12 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:urban_aura_flutter/core/common/bloc/auth/app_user_cubit.dart';
 import 'package:urban_aura_flutter/core/common/bloc/user/user_bloc.dart';
 import 'package:urban_aura_flutter/core/constants.dart';
+import 'package:urban_aura_flutter/core/extensions.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
-import 'package:urban_aura_flutter/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:urban_aura_flutter/core/common/bloc/auth/auth_bloc.dart';
 import 'package:urban_aura_flutter/core/common/bloc/cart/cart_bloc.dart';
 import 'package:urban_aura_flutter/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:urban_aura_flutter/features/orders/presentation/bloc/order_bloc.dart';
@@ -16,21 +18,22 @@ import 'package:urban_aura_flutter/features/search/presentation/bloc/search_bloc
 import 'package:urban_aura_flutter/init_dependencies.main.dart';
 
 import 'core/router/router.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Stripe.publishableKey = stripePublishableKey;
   Bloc.observer = AppBlocObserver();
+
+  'Initiating firebase '.log();
   await initDependencies();
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => serviceLocator<AppUserCubit>()..getCurrentUser(),
-        ),
-        BlocProvider(
-          create: (context) => serviceLocator<AuthBloc>(),
+          create: (context) =>
+              serviceLocator<AuthBloc>()..add(const AuthStatusRequestedEvent()),
         ),
         BlocProvider(
           create: (context) => serviceLocator<UserBloc>(),
@@ -57,9 +60,9 @@ Future<void> main() async {
           create: (context) => serviceLocator<OrderBloc>(),
         )
       ],
-      child: BlocListener<AppUserCubit, AppUserState>(
+      child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AppUserLoggedOutState) {
+          if (state is SignedOutState) {
             scaffoldMessengerKey.currentState?.showSnackBar(
               const SnackBar(
                 content: Text(

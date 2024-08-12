@@ -2,12 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/add_to_cart_usecase.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/get_cart_usecase.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/increment_cart_item_count_usecase.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/remove_from_cart_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/cart/add_to_cart_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/cart/get_cart_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/cart/increment_cart_item_count_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/cart/remove_from_cart_usecase.dart';
 import 'package:urban_aura_flutter/core/usecase.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/decrement_cart_item_count_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/cart/decrement_cart_item_count_usecase.dart';
 
 import 'cart_state.dart';
 

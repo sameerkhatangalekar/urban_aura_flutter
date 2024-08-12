@@ -2,11 +2,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urban_aura_flutter/core/common/domain/entities/address_entity.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/get_addresses_usecase.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/update_address_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/user/get_addresses_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/user/update_address_usecase.dart';
 import 'package:urban_aura_flutter/core/usecase.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/create_address_usecase.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/delete_address_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/user/create_address_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/user/delete_address_usecase.dart';
 
 
 part 'user_event.dart';

@@ -1,25 +1,30 @@
 import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get_it/get_it.dart';
 import 'package:urban_aura_flutter/core/common/bloc/user/user_bloc.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/add_to_cart_usecase.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/get_addresses_usecase.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/remove_from_cart_usecase.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/update_address_usecase.dart';
-import 'package:urban_aura_flutter/features/auth/data/datasource/auth_remote_data_source_impl.dart';
-import 'package:urban_aura_flutter/features/auth/data/repository/auth_repository_impl.dart';
-import 'package:urban_aura_flutter/features/auth/domain/repository/auth_repository.dart';
-import 'package:urban_aura_flutter/features/auth/domain/usecases/signin_usecase.dart';
-import 'package:urban_aura_flutter/features/auth/domain/usecases/signup_usecase.dart';
-import 'package:urban_aura_flutter/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/auth/signout_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/auth/signup_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/cart/add_to_cart_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/user/get_addresses_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/cart/remove_from_cart_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/user/update_address_usecase.dart';
+import 'package:urban_aura_flutter/core/common/data/datasources/auth/auth_remote_data_source_impl.dart';
+import 'package:urban_aura_flutter/core/common/data/repository/auth_repository_impl.dart';
+import 'package:urban_aura_flutter/core/common/domain/repository/auth_repository.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/auth/signin_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/auth/signin_with_google_usecase.dart';
+
+import 'package:urban_aura_flutter/core/common/bloc/auth/auth_bloc.dart';
 import 'package:urban_aura_flutter/core/common/data/datasources/cart/cart_remote_datasource.dart';
 import 'package:urban_aura_flutter/core/common/data/datasources/cart/cart_remote_datasource_impl.dart';
 import 'package:urban_aura_flutter/core/common/data/repository/cart_repository_impl.dart';
 import 'package:urban_aura_flutter/core/common/domain/repository/cart_repository.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/decrement_cart_item_count_usecase.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/get_cart_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/cart/decrement_cart_item_count_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/cart/get_cart_usecase.dart';
 import 'package:urban_aura_flutter/core/common/bloc/cart/cart_bloc.dart';
 import 'package:urban_aura_flutter/features/checkout/data/datasources/checkout_data_source.dart';
 import 'package:urban_aura_flutter/features/checkout/data/datasources/checkout_data_source_impl.dart';
@@ -40,9 +45,7 @@ import 'package:urban_aura_flutter/features/orders/presentation/bloc/order_bloc.
 import 'package:urban_aura_flutter/features/products/domain/usecase/get_product_by_id_usecase.dart';
 import 'package:urban_aura_flutter/features/products/domain/usecase/get_products_usecase.dart';
 import 'package:urban_aura_flutter/features/products/presentation/bloc/products_bloc.dart';
-import 'package:urban_aura_flutter/core/common/bloc/auth/app_user_cubit.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/increment_cart_item_count_usecase.dart';
-import 'package:urban_aura_flutter/core/router/router.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/cart/increment_cart_item_count_usecase.dart';
 import 'package:urban_aura_flutter/features/products/data/datasource/products_remote_data_source.dart';
 import 'package:urban_aura_flutter/features/products/data/datasource/products_remote_data_source_impl.dart';
 import 'package:urban_aura_flutter/features/products/data/repository/products_repository_impl.dart';
@@ -56,8 +59,8 @@ import 'package:urban_aura_flutter/core/common/data/datasources/user/user_data_s
 import 'package:urban_aura_flutter/core/common/data/datasources/user/user_data_source_impl.dart';
 import 'package:urban_aura_flutter/core/common/data/repository/user_repository_impl.dart';
 import 'package:urban_aura_flutter/core/common/domain/repository/user_repository.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/create_address_usecase.dart';
-import 'package:urban_aura_flutter/core/common/domain/usecase/delete_address_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/user/create_address_usecase.dart';
+import 'package:urban_aura_flutter/core/common/domain/usecase/user/delete_address_usecase.dart';
 
 import 'core/constants.dart';
 
@@ -84,6 +87,8 @@ Future<void> initDioClient() async {
   interceptors.add(
     InterceptorsWrapper(
       onRequest: (options, handler) async {
+        final user = FirebaseAuth.instance.currentUser;
+        print('Received user $user');
         final authHeader = await serviceLocator<FlutterSecureStorage>().read(
           key: 'jwtToken',
         );
@@ -97,16 +102,12 @@ Future<void> initDioClient() async {
       },
       onError: (error, handler) async {
         if (error.response?.statusCode == 401) {
-          if (AppRouter.router.routeInformationProvider.value.uri.path
-                  .contains('signup') ||
-              AppRouter.router.routeInformationProvider.value.uri.path
-                  .contains('signin')) {
+          if (error.requestOptions.path.contains('signup') ||
+              error.requestOptions.path.contains('signin')) {
             return handler.reject(error);
           }
           await serviceLocator<FlutterSecureStorage>().deleteAll();
-          serviceLocator<AppUserCubit>().logout(
-              message: error.response?.data["message"] ??
-                  'Re-authentication required!');
+          serviceLocator<AuthBloc>().add(const SignOutEvent());
         }
         return handler.reject(error);
       },
@@ -119,14 +120,14 @@ Future<void> initDioClient() async {
 
 void initAuth() {
   serviceLocator
-    ..registerLazySingleton<AppUserCubit>(
-      () => AppUserCubit(
-        storage: serviceLocator(),
-      ),
+    ..registerLazySingleton<FirebaseAuth>(
+          () => FirebaseAuth.instance,
     )
     ..registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImpl(
+        firebaseAuth: serviceLocator(),
         dio: serviceLocator(instanceName: 'globalDio'),
+        storage: serviceLocator(),
       ),
     )
     ..registerLazySingleton<AuthRepository>(
@@ -144,12 +145,25 @@ void initAuth() {
         authRepository: serviceLocator(),
       ),
     )
+    ..registerLazySingleton<SigninWithGoogleUsecase>(
+      () => SigninWithGoogleUsecase(
+        authRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton<SignOutUsecase>(
+      () => SignOutUsecase(
+        authRepository: serviceLocator(),
+      ),
+    )
     ..registerLazySingleton<AuthBloc>(
       () => AuthBloc(
-          signinUsecase: serviceLocator(),
-          signupUsecase: serviceLocator(),
-          storage: serviceLocator(),
-          appUserCubit: serviceLocator()),
+        signinUsecase: serviceLocator(),
+        signupUsecase: serviceLocator(),
+        storage: serviceLocator(),
+        signinWithGoogleUsecase: serviceLocator(),
+        firebaseAuth: serviceLocator(),
+        signOutUsecase: serviceLocator(),
+      ),
     );
 }
 

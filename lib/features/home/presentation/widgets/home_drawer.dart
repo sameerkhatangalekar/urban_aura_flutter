@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:urban_aura_flutter/core/common/bloc/auth/app_user_cubit.dart';
+import 'package:urban_aura_flutter/core/common/bloc/auth/auth_bloc.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({
@@ -31,8 +32,8 @@ class HomeDrawer extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
               tileColor: Colors.grey.shade100,
-              trailing: const Icon(
-                Icons.account_circle_sharp,
+              trailing: const FaIcon(
+                FontAwesomeIcons.userAstronaut,
                 color: Colors.black,
               ),
               title: const Text(
@@ -40,6 +41,7 @@ class HomeDrawer extends StatelessWidget {
                 style: TextStyle(color: Colors.black),
               ),
               onTap: () {
+                Scaffold.of(context).closeDrawer();
                 context.push('/user');
               },
             ),
@@ -50,8 +52,8 @@ class HomeDrawer extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
               tileColor: Colors.grey.shade100,
-              trailing: const Icon(
-                Icons.account_circle_sharp,
+              trailing: const FaIcon(
+                FontAwesomeIcons.gifts,
                 color: Colors.black,
               ),
               title: const Text(
@@ -77,7 +79,7 @@ class HomeDrawer extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
               ),
               onTap: () {
-                context.read<AppUserCubit>().logout();
+                context.read<AuthBloc>().add(const SignOutEvent());
               },
             ),
           ],

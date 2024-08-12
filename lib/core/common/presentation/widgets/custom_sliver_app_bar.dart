@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomSliverAppBar extends StatefulWidget {
@@ -15,6 +16,7 @@ class CustomSliverAppBar extends StatefulWidget {
 
 class _CustomSliverAppBarState extends State<CustomSliverAppBar> {
   final _searchController = TextEditingController();
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -27,8 +29,10 @@ class _CustomSliverAppBarState extends State<CustomSliverAppBar> {
         floating: true,
         stretch: true,
         centerTitle: true,
-        leading: widget.showBackButton ? IconButton(
-                onPressed: () => context.pop(), icon: const Icon(Icons.close)) : GestureDetector(
+        leading: widget.showBackButton
+            ? IconButton(
+                onPressed: () => context.pop(), icon: const Icon(Icons.close))
+            : GestureDetector(
                 onTap: () {
                   Scaffold.of(context).openDrawer();
                 },
@@ -55,10 +59,9 @@ class _CustomSliverAppBarState extends State<CustomSliverAppBar> {
             onTap: () {
               context.push('/search');
             },
-            child: SvgPicture.asset(
-              'assets/icons/search_icon.svg',
-              width: 24,
-              height: 24,
+            child: const FaIcon(
+              FontAwesomeIcons.searchengin,
+              color: Colors.black,
             ),
           ),
           const SizedBox(

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:urban_aura_flutter/core/common/bloc/auth/auth_bloc.dart';
 import 'package:urban_aura_flutter/core/common/dialogs/loading_dialog.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/spacer_box.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
-import 'package:urban_aura_flutter/features/auth/presentation/bloc/auth_bloc.dart';
+
 
 
 class SignupPage extends StatefulWidget {
@@ -35,6 +37,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -169,6 +172,40 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                     ),
                   ),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: size.width * 0.5,
+                      maxWidth: size.width * 0.5,
+                    ),
+                    child: IconButton(
+                      style: ButtonStyle(
+                        overlayColor: WidgetStatePropertyAll<Color>(
+                            Colors.grey.shade500),
+                        iconColor: const WidgetStatePropertyAll<Color>(
+                          Colors.black,
+                        ),
+                        backgroundColor: const WidgetStatePropertyAll<Color>(
+                          Colors.white,
+                        ),
+                        shape: const WidgetStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                        ),
+                        splashFactory: InkSparkle.splashFactory,
+                      ),
+                      onPressed: () async {
+                        context
+                            .read<AuthBloc>()
+                            .add(const GoogleSigninEvent());
+                      },
+                      icon:  const FaIcon(
+                        FontAwesomeIcons.google,
+                        size: 16,
+                      ),
+
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -194,21 +231,35 @@ class _SignupPageState extends State<SignupPage> {
               ),
             );
           }
-          if (state is SignupSuccessfulState) {
+          if (state is SigninSuccessfulState) {
             LoadingDialog().hide();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Signed up successfully',
+            ScaffoldMessenger.of(context)..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Signed up successfully',
+                        maxLines: 3,
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(overflow: TextOverflow.ellipsis),
+                      ),
+                      FaIcon(
+                        FontAwesomeIcons.userAstronaut,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 8,
+                  ),
+                  behavior: SnackBarBehavior.floating,
                 ),
-                margin: EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 8,
-                ),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-            context.pop();
+              );
+
+
           }
         },
       ),

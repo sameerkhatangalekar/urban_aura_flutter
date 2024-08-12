@@ -4,6 +4,8 @@ final class OrderModel extends OrderEntity {
   OrderModel(
       {required super.orderItems,
       required super.shipping,
+        required super.orderId,
+      super.refund,
       required super.id,
       required super.status,
       required super.totalAmount,
@@ -13,9 +15,11 @@ final class OrderModel extends OrderEntity {
       required super.updatedAt});
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
+    orderId: json['orderId'],
         orderItems: List<OrderItemModel>.from(
             json["orderItems"].map((x) => OrderItemModel.fromJson(x))),
         shipping: ShippingModel.fromJson(json["shipping"]),
+        refund: json['refund'] == null ?  null : RefundModel.fromJson(json['refund']) ,
         id: json["id"],
         status: statusMap[json["status"]]!,
         totalAmount: json["totalAmount"]?.toDouble(),
@@ -26,8 +30,10 @@ final class OrderModel extends OrderEntity {
       );
 
   Map<String, dynamic> toJson() => {
+        "orderId": orderId,
         "orderItems": orderItems,
         "shipping": shipping,
+        "refund" : refund,
         "id": id,
         "status": status,
         "totalAmount": totalAmount,
@@ -104,4 +110,22 @@ final class ShippingModel extends ShippingEntity {
         "line_one": lineOne,
         "postal_code": postalCode,
       };
+}
+
+final class RefundModel extends RefundEntity {
+  RefundModel(
+      {required super.status,
+         super.receipt,
+      });
+
+  factory RefundModel.fromJson(Map<String, dynamic> json) => RefundModel(
+    status: json["status"],
+    receipt: json["receipt"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "receipt": receipt,
+
+  };
 }

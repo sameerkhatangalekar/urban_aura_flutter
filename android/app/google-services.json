@@ -1,26 +1,43 @@
 {
   "project_info": {
-    "project_number": "1037376833956",
-    "project_id": "urban-aura-4cd33",
-    "storage_bucket": "urban-aura-4cd33.appspot.com"
+    "project_number": "447651406966",
+    "project_id": "urban-aura-209c9",
+    "storage_bucket": "urban-aura-209c9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1037376833956:android:a051b84c30f8a6cf831931",
+        "mobilesdk_app_id": "1:447651406966:android:70cfdfad068cbcd15ceb57",
         "android_client_info": {
           "package_name": "com.sameer.urban_aura_flutter"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "447651406966-2rjul04ksq7d753p9gv9pr9da81u34dd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyByOqIHVIbm5rYM75NqazO7Tv81NWO6V6o"
+          "current_key": "AIzaSyByR1y-hmIsbrwhTn6Wd0P-TAHIil9gmtE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "447651406966-2rjul04ksq7d753p9gv9pr9da81u34dd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "447651406966-oabu6cs3gigfcccicp3a3lkodkpl6kld.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sameer.urbanAuraFlutter"
+              }
+            }
+          ]
         }
       }
     }

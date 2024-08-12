@@ -30,11 +30,11 @@ class ShippingInfoCard extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: 'Name : ',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(),
                 children: [
                   TextSpan(
                     text: _order.shipping.name,
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   )
                 ],
               ),
@@ -42,11 +42,11 @@ class ShippingInfoCard extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: 'Contact : ',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(),
                 children: [
                   TextSpan(
                     text: _order.shipping.contact,
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   )
                 ],
               ),
@@ -54,11 +54,11 @@ class ShippingInfoCard extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: 'Address line 1 : ',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(),
                 children: [
                   TextSpan(
                     text: _order.shipping.lineOne,
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   )
                 ],
               ),
@@ -66,11 +66,11 @@ class ShippingInfoCard extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: 'City : ',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(),
                 children: [
                   TextSpan(
                     text: _order.shipping.city,
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   )
                 ],
               ),
@@ -78,11 +78,11 @@ class ShippingInfoCard extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: 'State : ',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(),
                 children: [
                   TextSpan(
                     text: _order.shipping.state,
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   )
                 ],
               ),
@@ -90,11 +90,11 @@ class ShippingInfoCard extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: 'Country : ',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(),
                 children: [
                   TextSpan(
                     text: _order.shipping.country,
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   )
                 ],
               ),

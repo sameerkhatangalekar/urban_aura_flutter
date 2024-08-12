@@ -42,10 +42,8 @@ class OrderItemCard extends StatelessWidget {
             Expanded(child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: [
-                const SizedBox(
-                  height: 4,
-                ),
                 Text(
                   _orderItemEntity.name,
                   maxLines: 4,

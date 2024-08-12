@@ -15,39 +15,47 @@ class OrderOverViewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return InkWell(
-        onTap: () =>
-            context.push('/orders/${_orderEntity.id}', extra: _orderEntity.id),
+      splashFactory: InkRipple.splashFactory,
+    borderRadius: BorderRadius.circular(12),
+
+    splashColor: Colors.transparent,
+      onTap: () =>
+          context.push('/orders/${_orderEntity.id}', extra: _orderEntity.id),
       child: Container(
-          margin: const EdgeInsets.all(8),
-          padding: const EdgeInsets.all(4),
+          margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4), color: AppPalette.inputBg),
+              borderRadius: BorderRadius.circular(12),
+              color: AppPalette.inputBg),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Column(
+                child:Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     RichText(
                         text: TextSpan(
-                            text: 'Order # ',
+                            text: 'Order #',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall
                                 ?.copyWith(
-                                    color: AppPalette.label,
-                                    fontWeight: FontWeight.bold),
+                                color: AppPalette.label,
+                                fontWeight: FontWeight.bold),
                             children: [
-                          TextSpan(
-                            text: _orderEntity.id,
-                            style:
-                                Theme.of(context).textTheme.titleSmall?.copyWith(
-                                      color: AppPalette.primaryColor,
-                                    ),
-                          )
-                        ])),
+                              TextSpan(
+                                text: _orderEntity.orderId,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
+                                  color: AppPalette.primaryColor,
+                                ),
+                              )
+                            ])),
                     RichText(
                         text: TextSpan(
                             text: 'Order placed : ',
@@ -55,31 +63,39 @@ class OrderOverViewCard extends StatelessWidget {
                                 .textTheme
                                 .titleSmall
                                 ?.copyWith(
-                                    color: AppPalette.label,
-                                    fontWeight: FontWeight.bold),
+                                color: AppPalette.label,
+                                fontWeight: FontWeight.bold),
                             children: [
-                          TextSpan(
-                            text: _orderEntity.createdAt.toLocal().toString(),
-                            style:
-                                Theme.of(context).textTheme.titleSmall?.copyWith(
-                                      color: AppPalette.primaryColor,
-                                    ),
-                          )
-                        ])),
+                              TextSpan(
+                                text: _orderEntity.createdAt.toLocal().toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
+                                  color: AppPalette.primaryColor,
+                                ),
+                              )
+                            ])),
                     RichText(
                       textAlign: TextAlign.justify,
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(
                         text: 'Ship to : ',
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: AppPalette.label, fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(
+                            color: AppPalette.label,
+                            fontWeight: FontWeight.bold),
                         children: [
                           TextSpan(
                             text: '${_orderEntity.shipping.name}, ',
-                            style:
-                                Theme.of(context).textTheme.titleSmall?.copyWith(
-                                      color: AppPalette.primaryColor,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                              color: AppPalette.primaryColor,
+                            ),
                           ),
                         ],
                       ),
@@ -89,8 +105,12 @@ class OrderOverViewCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(
                         text: 'Total : ',
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: AppPalette.label, fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(
+                            color: AppPalette.label,
+                            fontWeight: FontWeight.bold),
                         children: [
                           TextSpan(
                             text: '\$${_orderEntity.totalAmount}',
@@ -98,8 +118,8 @@ class OrderOverViewCard extends StatelessWidget {
                                 .textTheme
                                 .titleSmall
                                 ?.copyWith(
-                                    color: AppPalette.primaryColor,
-                                    fontWeight: FontWeight.bold),
+                                color: AppPalette.primaryColor,
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -108,7 +128,7 @@ class OrderOverViewCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                width: 8,
+                width: 4,
               ),
               Stack(
                 alignment: Alignment.center,
@@ -116,9 +136,9 @@ class OrderOverViewCard extends StatelessWidget {
                   Container(
                     width: size.width * 0.2,
                     decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(4)),
+                        BoxDecoration(borderRadius: BorderRadius.circular(8)),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(8),
                       child: CachedNetworkImage(
                         imageUrl: _orderEntity.orderItems.first.images.first,
                         fit: BoxFit.contain,
@@ -140,7 +160,5 @@ class OrderOverViewCard extends StatelessWidget {
             ],
           )),
     );
-
-
   }
 }

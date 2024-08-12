@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:urban_aura_flutter/core/common/dialogs/loading_dialog.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/spacer_box.dart';
 import 'package:urban_aura_flutter/core/theme/app_palette.dart';
-import 'package:urban_aura_flutter/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:urban_aura_flutter/core/common/bloc/auth/auth_bloc.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -99,9 +100,12 @@ class _SignInPageState extends State<SignInPage> {
                               },
                             );
                           },
-                          icon: Icon(isObscured
-                              ? CupertinoIcons.eye_slash
-                              : CupertinoIcons.eye),
+                          icon: Icon(
+                            isObscured
+                                ? CupertinoIcons.eye_slash
+                                : CupertinoIcons.eye,
+                            color: Colors.white70,
+                          ),
                         ),
                       ),
                       validator: (value) {
@@ -122,7 +126,7 @@ class _SignInPageState extends State<SignInPage> {
                         minWidth: size.width * 0.5,
                         maxWidth: size.width * 0.5,
                       ),
-                      child: TextButton.icon(
+                      child: TextButton(
                         style: ButtonStyle(
                           overlayColor: WidgetStatePropertyAll<Color>(
                               Colors.grey.shade500),
@@ -149,15 +153,44 @@ class _SignInPageState extends State<SignInPage> {
                                 );
                           }
                         },
-                        iconAlignment: IconAlignment.end,
-                        icon: const Icon(
-                          Icons.key_sharp,
-                        ),
-                        label: const Text(
+                        child: const Text(
                           'SIGN IN',
                           style: TextStyle(
                             color: Colors.black,
                           ),
+                        ),
+                      ),
+                    ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * 0.5,
+                        maxWidth: size.width * 0.5,
+                      ),
+                      child: IconButton(
+                        style: ButtonStyle(
+                          overlayColor: WidgetStatePropertyAll<Color>(
+                              Colors.grey.shade500),
+                          iconColor: const WidgetStatePropertyAll<Color>(
+                            Colors.black,
+                          ),
+                          backgroundColor: const WidgetStatePropertyAll<Color>(
+                            Colors.white,
+                          ),
+                          shape: const WidgetStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
+                          ),
+                          splashFactory: InkSparkle.splashFactory,
+                        ),
+                        onPressed: () async {
+                          context
+                              .read<AuthBloc>()
+                              .add(const GoogleSigninEvent());
+                        },
+                        icon: const FaIcon(
+                          FontAwesomeIcons.google,
+                          size: 16,
                         ),
                       ),
                     ),
@@ -191,33 +224,45 @@ class _SignInPageState extends State<SignInPage> {
             }
             if (state is SigninFailedState) {
               LoadingDialog().hide();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    state.message,
-                    maxLines: 4,
-                    textAlign: TextAlign.justify,
-                    style: const TextStyle(
-                      overflow: TextOverflow.ellipsis,
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      state.message,
+                      maxLines: 4,
+                      textAlign: TextAlign.justify,
+                      style: const TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 8,
+                    ),
+                    behavior: SnackBarBehavior.floating,
                   ),
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 8,
-                  ),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+                );
             }
             if (state is SigninSuccessfulState) {
               LoadingDialog().hide();
-              ScaffoldMessenger.of(context).showSnackBar(
+              ScaffoldMessenger.of(context)..hideCurrentSnackBar()
+                ..showSnackBar(
                 const SnackBar(
-                  content: Text(
-                    'Logged in successfully',
-                    maxLines: 3,
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(overflow: TextOverflow.ellipsis),
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Logged in successfully',
+                        maxLines: 3,
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(overflow: TextOverflow.ellipsis),
+                      ),
+                      FaIcon(
+                        FontAwesomeIcons.userAstronaut,
+                        color: Colors.white,
+                      )
+                    ],
                   ),
                   margin: EdgeInsets.symmetric(
                     horizontal: 8,
