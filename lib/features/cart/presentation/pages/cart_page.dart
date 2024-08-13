@@ -44,7 +44,10 @@ class CartPage extends StatelessWidget {
             builder: (context, state) {
               if (state is CartLoadingState) {
                 return const SliverToBoxAdapter(
-                  child: Center(child: CustomCircularProgressIndicator()),
+                  child: Padding(
+                    padding: EdgeInsets.all(28),
+                    child: Center(child: CustomCircularProgressIndicator()),
+                  ),
                 );
               }
               if (state is CartSuccessState) {

@@ -22,31 +22,30 @@ class _RecommendationsListState extends State<RecommendationsList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-          child: Text(
-            'JUST FOR YOU',
-            style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headlineSmall?.fontSize,
-                letterSpacing: 4,
-                color: AppPalette.titleActive),
-          ),
-        ),
-        const CustomDivider(),
-        const SpacerBox(),
-        BlocBuilder<ProductsBloc, ProductsState>(
-          builder: (context, state) {
-            if (state is ProductListLoadingState) {
-              return const SliverToBoxAdapter(
-                child: Center(child: CustomCircularProgressIndicator()),
-              );
-            }
-            if (state is ProductListLoadedState) {
-              ///This is done to avoid same hero tags and should be removed as soon as algolia recommendation is plugged in
-              //TODO plug algolia recommendation model
-              final products = state.products.skip(4).toList();
-              return CarouselSlider.builder(
+    return BlocBuilder<ProductsBloc, ProductsState>(
+      builder: (context, state) {
+        if (state is ProductListLoadingState) {
+          return const Center(child: CustomCircularProgressIndicator());
+        }
+        if (state is ProductListLoadedState) {
+          ///This is done to avoid same hero tags and should be removed as soon as algolia recommendation is plugged in
+          //TODO plug algolia recommendation model
+          final products = state.products.skip(4).toList();
+          Column(
+            children: [
+              Center(
+                child: Text(
+                  'JUST FOR YOU',
+                  style: TextStyle(
+                      fontSize:
+                          Theme.of(context).textTheme.headlineSmall?.fontSize,
+                      letterSpacing: 4,
+                      color: AppPalette.titleActive),
+                ),
+              ),
+              const CustomDivider(),
+              const SpacerBox(),
+              CarouselSlider.builder(
                 itemCount: state.products.isEmpty ? 1 : min(4, products.length),
                 itemBuilder: (context, itemIndex, pageViewIndex) {
                   return ProductCard(product: products[itemIndex]);
@@ -63,23 +62,23 @@ class _RecommendationsListState extends State<RecommendationsList> {
                     viewportFraction: 0.6,
                     initialPage: 0,
                     aspectRatio: 1.0),
-              );
-            }
+              )
+            ],
+          );
+        }
 
-            if (state is ProductListFailedState) {
-              return Center(
-                child: IconButton(
-                  onPressed: () => context.read<ProductsBloc>().add(
-                        const GetProductsEvent(),
-                      ),
-                  icon: const Icon(CupertinoIcons.refresh),
-                ),
-              );
-            }
-            return Container();
-          },
-        ),
-      ],
+        if (state is ProductListFailedState) {
+          return Center(
+            child: IconButton(
+              onPressed: () => context.read<ProductsBloc>().add(
+                    const GetProductsEvent(),
+                  ),
+              icon: const Icon(CupertinoIcons.refresh),
+            ),
+          );
+        }
+        return Container();
+      },
     );
   }
 }

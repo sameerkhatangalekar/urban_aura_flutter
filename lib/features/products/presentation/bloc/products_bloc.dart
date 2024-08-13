@@ -22,6 +22,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
         // _getProductsByIdUsecase = getProductsByIdUsecase,
         super(const ProductsInitial()) {
     on<GetProductsEvent>((event, emit) async {
+      emit(const ProductListLoadingState());
       final result = await _getProductsUseCase(const NoParams());
       result.fold(
         (l) => emit(

@@ -245,6 +245,9 @@ class HomePage extends StatelessWidget {
             const SliverToBoxAdapter(
               child: RecommendationsList(),
             ),
+            const SliverToBoxAdapter(
+              child: SpacerBox(),
+            ),
             SliverToBoxAdapter(
               child: Container(
                 color: AppPalette.cardBackground,

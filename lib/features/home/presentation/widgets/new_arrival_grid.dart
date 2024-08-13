@@ -15,35 +15,36 @@ class NewArrivalGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiSliver(children: [
-      SliverToBoxAdapter(
-        child: Center(
-          child: Text(
-            'NEW ARRIVAL',
-            style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headlineSmall?.fontSize,
-                letterSpacing: 4,
-                color: AppPalette.titleActive),
-          ),
-        ),
-      ),
-      const SliverToBoxAdapter(
-        child: CustomDivider(),
-      ),
-      const SliverToBoxAdapter(
-        child: SizedBox(
-          height: 12,
-        ),
-      ),
-      BlocBuilder<ProductsBloc, ProductsState>(
-        builder: (context, state) {
-          if (state is ProductListLoadingState) {
-            return const SliverToBoxAdapter(
-              child: Center(child: CustomCircularProgressIndicator()),
-            );
-          }
-          if (state is ProductListLoadedState) {
-            return SliverPadding(
+    return BlocBuilder<ProductsBloc, ProductsState>(
+      builder: (context, state) {
+        if (state is ProductListLoadingState) {
+          return const SliverToBoxAdapter(
+            child: Center(child: CustomCircularProgressIndicator()),
+          );
+        }
+        if (state is ProductListLoadedState) {
+          return MultiSliver(children: [
+            SliverToBoxAdapter(
+              child: Center(
+                child: Text(
+                  'NEW ARRIVAL',
+                  style: TextStyle(
+                      fontSize:
+                          Theme.of(context).textTheme.headlineSmall?.fontSize,
+                      letterSpacing: 4,
+                      color: AppPalette.titleActive),
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: CustomDivider(),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 12,
+              ),
+            ),
+            SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 2),
               sliver: SliverGrid.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -64,25 +65,25 @@ class NewArrivalGrid extends StatelessWidget {
                   );
                 },
               ),
-            );
-          }
+            )
+          ]);
+        }
 
-          if (state is ProductListFailedState) {
-            return SliverToBoxAdapter(
-              child: Center(
-                child: IconButton(
-                  onPressed: () => context.read<ProductsBloc>().add(
-                        const GetProductsEvent(),
-                      ),
-                  icon: const Icon(CupertinoIcons.refresh),
-                ),
+        if (state is ProductListFailedState) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: IconButton(
+                onPressed: () => context.read<ProductsBloc>().add(
+                      const GetProductsEvent(),
+                    ),
+                icon: const Icon(CupertinoIcons.refresh),
               ),
-            );
-          }
+            ),
+          );
+        }
 
-          return const SliverToBoxAdapter();
-        },
-      ),
-    ]);
+        return const SliverToBoxAdapter();
+      },
+    );
   }
 }

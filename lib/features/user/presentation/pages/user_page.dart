@@ -7,6 +7,7 @@ import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_circu
 import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_divider.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/custom_sliver_app_bar.dart';
 import 'package:urban_aura_flutter/core/common/presentation/widgets/address_card.dart';
+import 'package:urban_aura_flutter/core/common/presentation/widgets/spacer_box.dart';
 import 'package:urban_aura_flutter/features/user/presentation/widgets/address_form.dart';
 
 class UserPage extends StatelessWidget {
@@ -50,10 +51,16 @@ class UserPage extends StatelessWidget {
                 showBackButton: true,
               ),
               const SliverToBoxAdapter(
+                child: SpacerBox(),
+              ),
+              const SliverToBoxAdapter(
                 child: Center(child: Text('Addresses')),
               ),
               const SliverToBoxAdapter(
                 child: CustomDivider(),
+              ),
+              const SliverToBoxAdapter(
+                child: SpacerBox(),
               ),
               SliverToBoxAdapter(
                   child: Center(
@@ -89,6 +96,9 @@ class UserPage extends StatelessWidget {
                   ),
                 ),
               )),
+              const SliverToBoxAdapter(
+                child: SpacerBox(height: 12,),
+              ),
               BlocBuilder<UserBloc, UserState>(builder: (context, state) {
                 if (state is UserAddressLoadingState) {
                   return const SliverToBoxAdapter(
