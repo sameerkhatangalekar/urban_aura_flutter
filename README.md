@@ -2,7 +2,7 @@
 
 ✨ **Urban Aura** is a luxury fashion eCommerce app built with **Flutter**. It offers a seamless shopping experience with an elegant and modern user interface. The app integrates advanced features like **Stripe** for secure payment processing and **Algolia** for fast and accurate product search. The codebase follows **Clean Architecture** principles & **Functional programming** principles to ensure maintainability and scalability.
 
-![Banner Img](https://firebasestorage.googleapis.com/v0/b/portfolio-7177e.appspot.com/o/clothing%2FUrbanAura%20Banner.jpg?alt=media&token=f271fb98-d2ac-48fc-a1ec-9736c2c1470d)
+![Banner Img](https://firebasestorage.googleapis.com/v0/b/portfolio-7177e.appspot.com/o/portfolio%2Fimages%2FUrbanAuraMobile.jpg?alt=media&token=5538290e-65d7-45d4-ad3f-1bd8eae82321)
 
 ## 🎨 Features
 
